@@ -38,6 +38,7 @@ const patient = new mongoose.Schema({
 });
 
 var hosptial = new Schema({
+	
 	name: {
 		type: String,
 		required: true
