@@ -8,7 +8,7 @@ var imgbbUploader = require("imgbb-uploader");
 const {
   Unauthorized,
   SomethingWentWrong,
-  BadRequent,
+  BadRequest,
   Success,
 } = require("../response_helpers/responseHelpers");
 const { parse } = require("path");
@@ -70,7 +70,9 @@ routes.post(
   "/registerHospital",
   upload.single("image"),
   async (req, res, next) => {
+    console.log("dkdsndnsfndn");
     const { name, city, state, specs, meetLink, startTime, endTime } = req.body;
+    console.log(req.body);
     try {
       if (
         !name ||
@@ -82,6 +84,7 @@ routes.post(
         !startTime ||
         !endTime
       ) {
+        console.log("dmkkl")
         return BadRequest(res, "One or more field unspecified");
       }
       var st_time = startTime.split(":");

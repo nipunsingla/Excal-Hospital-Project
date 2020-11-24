@@ -2,14 +2,19 @@ import 'package:HomeTreatment/model/patientHospitalModel.dart';
 import 'package:HomeTreatment/model/patientModel.dart';
 
 import './patientHospitalModel.dart';
+class TimeModel{
+  String timeSlot;
+  bool status;
+  TimeModel(this.timeSlot,this.status);
+}
 class HospitalModel{
+  String id;
   String name;
   String city;
   String state;
   String meetLink;
   String url;
   String imageUrl;
-  List<DateTime> _possibleTimes;
-  List<PatientHospitalModel> li;
-  HospitalModel(this.name,this.city,this.state,this.imageUrl,this.meetLink,this.li);
+  List<dynamic> possibleTimes;
+  HospitalModel(this.name,this.city,this.state,this.imageUrl,this.meetLink,this.possibleTimes,this.id);
 }

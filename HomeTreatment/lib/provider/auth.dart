@@ -28,6 +28,11 @@ class Auth with ChangeNotifier {
     return _isAuth;
   }
 
+  void setToken(String token) {
+    print(token);
+    this._token = token;
+  }
+
   Future<void> signUp(String name, String email, String contact,
       String password, String gender, String age) async {
     try {
@@ -81,10 +86,46 @@ class Auth with ChangeNotifier {
   }
 
   Future<List<HospitalModel>> getAllHospitalList() async {
-    List<PatientHospitalModel> lm;
+    try {
+      List<PatientHospitalModel> lm;
 
-    var response = await http.get(
-        new Uri.http("10.0.2.2:3001", "/hospital/getAllHospitals"),
+      var response = await http.get(
+          new Uri.http("10.0.2.2:3001", "/hospital/getAllHospitals"),
+          headers: {'authorization': _token});
+      var jsonResponse = jsonDecode(response.body);
+      //print(jsonResponse);
+      //print(jsonResponse['message']);
+
+      if (jsonResponse['flag'] == 0) {
+        return [];
+      } else {
+        List<HospitalModel> li = [];
+        for (int i = 0; i < jsonResponse['payload'].length; i++) {
+          var item = jsonResponse['payload'][i];
+          print(item);
+          HospitalModel temp = new HospitalModel(
+              item['name'],
+              item['city'],
+              item['state'],
+              item['imageUrl'],
+              item['meetLink'],
+              item['timings'],
+              item['_id']);
+          print("i am temp");
+          print(temp);
+          li.add(temp);
+        }
+        return li;
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  Future<List<AppointmentList>> getHospitalAppointmentList(String id) async {
+    List<AppointmentList> lm;
+
+    var response = await http.get(new Uri.http("10.0.2.2:3001", "/hospital/"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
@@ -93,41 +134,10 @@ class Auth with ChangeNotifier {
     if (jsonResponse['flag'] == 0) {
       return [];
     } else {
-      List<HospitalModel> li = [
-        HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
-        HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
-        HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
-      ];
-      return li;
+      for (int i = 0; i < jsonResponse['payload'].length; i++) {
+        AppointmentList li=new AppointmentList(jsonResponse['payload']['startTime'], jsonResponse['payload']['endTime'],jsonResponse['status'])
+      }
     }
-  }
-
-  Future<List<AppointmentList>> getHospitalAppointmentList() async {
-    // List<PatientHospitalModel> lm;
-
-    // var response = await http.get(
-    //     new Uri.http("10.0.2.2:3001","/hospital/getAllHospitals"),
-    //     headers: {'authorization': _token});
-    // var jsonResponse = jsonDecode(response.body);
-    // print(jsonResponse);
-    // print(jsonResponse['message']);
-
-    // if (jsonResponse['flag'] == 0) {
-    //   return [];
-    // } else {
-    //   List<HospitalModel> li = [
-    //     HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
-    //     HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
-    //     HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
-    //   ];
-    //   return li;
-    // }
-    List<AppointmentList> li = [
-      AppointmentList("nipun", DateTime.now(), DateTime.now()),
-      AppointmentList("nipun", DateTime.now(), DateTime.now()),
-      AppointmentList("nipun", DateTime.now(), DateTime.now()),
-    ];
-    return li;
   }
 
   Future<void> registerHospital(
@@ -141,16 +151,17 @@ class Auth with ChangeNotifier {
       String filename,
       String hospitalUrl) async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse("10.0.2.2:3001/hospital/registerHospital"));
+        'POST', Uri.parse("http://10.0.2.2:3001/hospital/registerHospital"));
     request.files.add(await http.MultipartFile.fromPath('image', filename));
     request.fields['name'] = name;
     request.fields['city'] = city;
+    request.fields['state'] = city;
     request.fields['specs'] = specs;
     request.fields['startTime'] = startTime;
     request.fields['endTime'] = endTime;
     request.fields['hospitalUrl'] = hospitalUrl;
     request.fields['meetLink'] = meetLink;
-
+    request.headers['authorization'] = _token;
     var res = await request.send();
     print(res);
   }

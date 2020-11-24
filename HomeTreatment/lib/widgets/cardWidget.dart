@@ -1,9 +1,12 @@
+import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/screens/AppointmentScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:link/link.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class CardWidget extends StatelessWidget {
+  HospitalModel li;
+  CardWidget(this.li);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,8 +24,7 @@ class CardWidget extends StatelessWidget {
                       color: Colors.red,
                       image: DecorationImage(
                           image: NetworkImage(
-                              'https://www.urmc.rochester.edu/MediaLibraries/URMCMedia/strong-memorial/images/Strong-Memorial-Hospital-nighttime.jpg'),
-                          fit: BoxFit.cover),
+                        li.imageUrl),  fit: BoxFit.cover),
                       boxShadow: [
                         BoxShadow(blurRadius: 7.0, color: Colors.black)
                       ]),
@@ -42,7 +44,7 @@ class CardWidget extends StatelessWidget {
                       ),
                     ),
                     label: Text(
-                      'AIMS',
+                      li.name,
                       style: TextStyle(
                           fontSize: 20,
                           color: Theme.of(context).backgroundColor),
@@ -53,7 +55,7 @@ class CardWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "City, State",
+                        "${li.city}, ${li.state}",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -72,7 +74,7 @@ class CardWidget extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                               decoration: TextDecoration.underline),
                         ),
-                        url: 'https://flutter.dev',
+                        url: li.url,
                       ),
                     ),
                   ),

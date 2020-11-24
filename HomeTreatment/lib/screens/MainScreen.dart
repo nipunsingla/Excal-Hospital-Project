@@ -25,9 +25,7 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> _buildScreens() {
     return [
-      HospitalListScreen(
-        
-      ),
+      HospitalListScreen(),
       HospitalListScreen(),
       HospitalListScreen(),
       HospitalListScreen(),

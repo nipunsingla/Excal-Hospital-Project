@@ -1,4 +1,5 @@
 import 'package:HomeTreatment/model/AppointmentList.dart';
+import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/SearchBar.dart';
@@ -10,17 +11,18 @@ import 'package:flutter_search_bar/flutter_search_bar.dart';
 
 class AppointmentScreen extends StatefulWidget {
   static const routeName = '/appointment-screen';
-
   @override
   _AppointmentScreenState createState() => _AppointmentScreenState();
 }
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
   List<AppointmentList> li = [];
+  
+  HospitalModel m;
   void getList() async {
     print(li);
     List<AppointmentList> temp = await Provider.of<Auth>(context, listen: false)
-        .getHospitalAppointmentList();
+        .getHospitalAppointmentList(m.id);
     setState(() {
       li = temp;
     });
@@ -41,6 +43,7 @@ SearchBar searchBar;
   }
   void initState() {
     super.initState();
+    m=ModalRoute.of(context).settings.arguments;
     getList();
   }
   _AppointmentScreenState(){
