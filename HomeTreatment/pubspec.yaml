@@ -34,6 +34,9 @@ dependencies:
   link: ^1.0.0
   flutter_search_bar: ^2.1.0
 
+  flutter_svg: ^0.18.1
+  image_picker: ^0.6.7+14
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

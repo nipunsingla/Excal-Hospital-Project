@@ -4,6 +4,7 @@ import 'package:HomeTreatment/model/patientHospitalModel.dart';
 import 'package:HomeTreatment/model/serverData.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
+
 import '../model/patientModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -60,8 +61,7 @@ class Auth with ChangeNotifier {
   Future<void> login(String email, String password) async {
     try {
       print("i am in auth");
-      var response = await http.post(
-          new Uri.http("10.0.2.2:3001","/login"),
+      var response = await http.post(new Uri.http("10.0.2.2:3001", "/login"),
           body: {"email": email, "password": password});
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
@@ -84,7 +84,7 @@ class Auth with ChangeNotifier {
     List<PatientHospitalModel> lm;
 
     var response = await http.get(
-        new Uri.http("10.0.2.2:3001","/hospital/getAllHospitals"),
+        new Uri.http("10.0.2.2:3001", "/hospital/getAllHospitals"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
@@ -101,6 +101,7 @@ class Auth with ChangeNotifier {
       return li;
     }
   }
+
   Future<List<AppointmentList>> getHospitalAppointmentList() async {
     // List<PatientHospitalModel> lm;
 
@@ -121,13 +122,36 @@ class Auth with ChangeNotifier {
     //   ];
     //   return li;
     // }
-    List<AppointmentList> li=[
-      AppointmentList("nipun",DateTime.now(),DateTime.now()),
-
-      AppointmentList("nipun",DateTime.now(),DateTime.now()),
-      AppointmentList("nipun",DateTime.now(),DateTime.now()),
+    List<AppointmentList> li = [
+      AppointmentList("nipun", DateTime.now(), DateTime.now()),
+      AppointmentList("nipun", DateTime.now(), DateTime.now()),
+      AppointmentList("nipun", DateTime.now(), DateTime.now()),
     ];
     return li;
+  }
 
+  Future<void> registerHospital(
+      String name,
+      String city,
+      String state,
+      String specs,
+      String meetLink,
+      String startTime,
+      String endTime,
+      String filename,
+      String hospitalUrl) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse("10.0.2.2:3001/hospital/registerHospital"));
+    request.files.add(await http.MultipartFile.fromPath('image', filename));
+    request.fields['name'] = name;
+    request.fields['city'] = city;
+    request.fields['specs'] = specs;
+    request.fields['startTime'] = startTime;
+    request.fields['endTime'] = endTime;
+    request.fields['hospitalUrl'] = hospitalUrl;
+    request.fields['meetLink'] = meetLink;
+
+    var res = await request.send();
+    print(res);
   }
 }

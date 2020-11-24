@@ -9,6 +9,7 @@ class HospitalModel{
   String meetLink;
   String url;
   String imageUrl;
+  List<DateTime> _possibleTimes;
   List<PatientHospitalModel> li;
   HospitalModel(this.name,this.city,this.state,this.imageUrl,this.meetLink,this.li);
 }

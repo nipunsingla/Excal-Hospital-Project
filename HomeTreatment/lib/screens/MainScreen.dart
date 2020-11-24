@@ -1,4 +1,5 @@
 import 'package:HomeTreatment/screens/HospitalListScreen.dart';
+import 'package:HomeTreatment/screens/MorePage.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -30,8 +31,7 @@ class _MainScreenState extends State<MainScreen> {
       HospitalListScreen(),
       HospitalListScreen(),
       HospitalListScreen(),
-      HospitalListScreen(),
-      
+      MorePage()
     ];
   }
 
