@@ -1,15 +1,36 @@
+import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'LoginScreen.dart';
 import './SignUpScreen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = '/';
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  void callPrefences() async {
+
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+       
+      var token=prefs.getString('token');
+      if(token!=null){
+        Navigator.of(context).pushNamed(MainScreen.routeName);
+      }
+  }
+  void initState(){
+     callPrefences();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: HexColor("#151515"),
-      body: Scrollbar(
+      body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
@@ -46,7 +67,10 @@ class HomeScreen extends StatelessWidget {
                 new Container(
                   width: MediaQuery.of(context).size.width,
                   margin: const EdgeInsets.only(
-                      left: 30.0, right: 30.0, top: 180.0),
+                    left: 30.0,
+                    right: 30.0,
+                    top: 180.0,
+                  ),
                   alignment: Alignment.center,
                   child: new Row(
                     children: <Widget>[
@@ -97,7 +121,9 @@ class HomeScreen extends StatelessWidget {
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(30.0)),
                           color: Colors.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            
+                          },
                           child: new Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 20.0,

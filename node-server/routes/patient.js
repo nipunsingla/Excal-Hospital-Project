@@ -73,7 +73,7 @@ routes.post("/register", (req, res) => {
 							newPatient.save(async (err, newUser) => {
 								if (err) {
 									res.json({
-										message: "ERROR DURING REGISTRATION", flag: 0
+										message:"Some Error In Registration", flag: 0
 									});
 								} else {
 									const token = await generateToken(newUser.email, newUser._id)
@@ -92,7 +92,7 @@ routes.post("/register", (req, res) => {
 		.catch(err => {
 			res.json({
 				message: "SOMETHING WENT WRONG",
-				flag: 1
+				flag: 0
 			});
 		});
 });
@@ -243,6 +243,7 @@ routes.post("/getLocation/hospital_detail_delete", verifyToken, (req, res) => {
 			})
 	}
 });
+
 routes.post("/getLocation/hospital_detail", verifyToken, async (req, res) => {
 	const id = req.query.id;
 	const desc = req.body.desc;
@@ -252,7 +253,7 @@ routes.post("/getLocation/hospital_detail", verifyToken, async (req, res) => {
 		.add(30, "minutes")
 		.format("HH:mm");
 	// console.log(final_time);
-	const token = req.cookies.token || "";
+	const token = req.headers['authorization'] || "";
 	const decrypt = await jwt.verify(token, secret);
 	const username = decrypt.username;
 	Patient.findOne({ username: username }).then(user => {

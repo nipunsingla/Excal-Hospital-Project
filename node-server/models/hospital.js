@@ -8,11 +8,10 @@ var Image = new Schema({
 });
 
 const patient = new mongoose.Schema({
-	username: {
+	email: {
 		type: String,
 		required: true
 	},
-
 	password: {
 		type: String,
 		required: true
@@ -47,21 +46,22 @@ var hosptial = new Schema({
 		type: String,
 		required: true
 	},
-
 	state: {
 		type: String,
 		required: true
 	},
 	Url: {
-		type: String
+		type: String	
 	},
 	specs: {
 		type: String
 	},
 	imageUrl: {
-		type: Image
+		type: String
 	},
-
+	meetLink:{
+		type:String
+	},
 	Patients: [
 		{
 			Patient: {

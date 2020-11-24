@@ -89,8 +89,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               _onLoading();
               if (_formKey.currentState.validate()) {
                 // If the form is valid, display a Snackbar.
-                Scaffold.of(context)
-                    .showSnackBar(SnackBar(content: Text('Processing Data')));
                 _onLoading();
                 await Provider.of<Auth>(context, listen: false).signUp(
                     _nameController.text,
@@ -100,8 +98,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _genderController.text,
                     _ageController.text);
                 _onLoading();
-                Navigator.of(context)
-                    .pushReplacementNamed(MainScreen.routeName);
+                if (Provider.of<Auth>(context, listen: false).isAuth()) {
+                  Navigator.of(context)
+                      .pushReplacementNamed(MainScreen.routeName);
+                } else {
+                  Scaffold.of(context)
+                      .showSnackBar(SnackBar(content: Text('Error')));
+                }
               } else {
                 Scaffold.of(context)
                     .showSnackBar(SnackBar(content: Text('Eroooorr')));
