@@ -1,5 +1,4 @@
 class AppointmentList{
-  String id;
   String name;
   DateTime startTime;
   DateTime endTime;
