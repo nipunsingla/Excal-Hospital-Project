@@ -42,18 +42,15 @@ var hosptial = new Schema({
     type: String,
     required: true,
   },
-
   city: {
     type: String,
     required: true,
   },
-
   state: {
     type: String,
     required: true,
   },
-
-  Url: {
+  hospitalUrl: {
     type: String,
   },
   specs: {
@@ -65,7 +62,7 @@ var hosptial = new Schema({
   meetLink: {
     type: String,
   },
-  Patients: [
+  timings: [
     {
       type: Object,
     },

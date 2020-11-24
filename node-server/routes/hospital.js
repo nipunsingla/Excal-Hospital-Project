@@ -11,6 +11,7 @@ const {
   BadRequent,
   Success,
 } = require("../response_helpers/responseHelpers");
+const { parse } = require("path");
 
 const apiKey = "d280e1203b0c1c3b9f00013d8580227c";
 
@@ -64,28 +65,63 @@ routes.get("/getAllHospitals", async (req, res, next) => {
   }
 });
 
+// meetLink,
 routes.post(
   "/registerHospital",
   upload.single("image"),
   async (req, res, next) => {
-    const { name, city, state, specs } = req.body;
+    const { name, city, state, specs, meetLink, startTime, endTime } = req.body;
     try {
-      if (!name || !city || !state || !specs || !req.file) {
-        return BadRequent(res, "One or more field unspecified");
+      if (
+        !name ||
+        !city ||
+        !state ||
+        !specs ||
+        !req.file ||
+        !meetLink ||
+        !startTime ||
+        !endTime
+      ) {
+        return BadRequest(res, "One or more field unspecified");
       }
-
+      var st_time = startTime.split(":");
+      var en_time = endTime.split(":");
+      var start = new Date();
+      var end = new Date();
+      start.setHours(
+        parseInt(st_time[0], 10),
+        parseInt(st_time[1], 10),
+        parseInt(st_time[2], 10)
+      );
+      end.setHours(
+        parseInt(en_time[0], 10),
+        parseInt(en_time[1], 10),
+        parseInt(en_time[2], 10)
+      );
+      const timings = [];
+      var tmp = start;
+      while (tmp <= end) {
+        timings.push({
+          timeslot: tmp.toString().split(" ")[4],
+          status: false,
+        });
+        tmp = new Date(tmp.getTime() + 35 * 60000);
+      }
       var imgUploaderResponse = await imgbbUploader(apiKey, req.file.path);
       var newHospital = new Hosptial({
         name,
         city,
         state,
-        Url: imgUploaderResponse.url,
+        imageUrl: imgUploaderResponse.url,
         specs,
+        meetLink,
+        timings,
       });
 
       var response = await newHospital.save();
       return Success(res, response);
     } catch (err) {
+      console.log(err);
       return SomethingWentWrong(res);
     }
   }

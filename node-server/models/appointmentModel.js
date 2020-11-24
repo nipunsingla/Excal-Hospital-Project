@@ -23,6 +23,9 @@ const appointmentSchema = new Schema({
     type: Number,
     default: 0,
   },
+  status: {
+    type: Boolean,
+  },
 });
 
 module.exports = mongoose.model("appointment", appointmentSchema);
