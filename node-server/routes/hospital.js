@@ -1,14 +1,16 @@
 const express = require("express");
 const routes = express.Router();
-const Hosptial = require("../models/hospital.js");
 const image = require("../models/image.js");
 const multer = require("multer");
 var imgbbUploader = require("imgbb-uploader");
 
+const Hosptial = require("../models/hospital.js");
+const Appointment = require("../models/appointmentModel");
+
 const {
   Unauthorized,
   SomethingWentWrong,
-  BadRequent,
+  BadRequest,
   Success,
 } = require("../response_helpers/responseHelpers");
 const { parse } = require("path");
@@ -65,12 +67,31 @@ routes.get("/getAllHospitals", async (req, res, next) => {
   }
 });
 
+routes.get("/getPatientList", async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const appointments = await Appointment.find({ hospitalId: id });
+    return Success(res, appointments);
+  } catch (err) {
+    return SomethingWentWrong(res);
+  }
+});
+
 // meetLink,
 routes.post(
   "/registerHospital",
   upload.single("image"),
   async (req, res, next) => {
-    const { name, city, state, specs, meetLink, startTime, endTime } = req.body;
+    const {
+      name,
+      city,
+      state,
+      specs,
+      meetLink,
+      startTime,
+      endTime,
+      hospitalUrl,
+    } = req.body;
     try {
       if (
         !name ||
@@ -80,7 +101,8 @@ routes.post(
         !req.file ||
         !meetLink ||
         !startTime ||
-        !endTime
+        !endTime ||
+        !hospitalUrl
       ) {
         return BadRequest(res, "One or more field unspecified");
       }
@@ -99,13 +121,16 @@ routes.post(
         parseInt(en_time[2], 10)
       );
       const timings = [];
-      var tmp = start;
-      while (tmp <= end) {
+      var tmp1 = start;
+      var tmp2 = new Date(tmp1.getTime() + 30 * 60000);
+      while (tmp1 <= end) {
         timings.push({
-          timeslot: tmp.toString().split(" ")[4],
+          timeslotStart: tmp1.toString().split(" ")[4],
+          timeslotEnd: tmp2.toString().split(" ")[4],
           status: false,
         });
-        tmp = new Date(tmp.getTime() + 35 * 60000);
+        tmp1 = new Date(tmp1.getTime() + 35 * 60000);
+        tmp2 = new Date(tmp1.getTime() + 30 * 60000);
       }
       var imgUploaderResponse = await imgbbUploader(apiKey, req.file.path);
       var newHospital = new Hosptial({
@@ -116,6 +141,7 @@ routes.post(
         specs,
         meetLink,
         timings,
+        hospitalUrl,
       });
 
       var response = await newHospital.save();
