@@ -55,6 +55,7 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
 
   @override
   void initState() {
+    print(DateTime.now());
     super.initState();
     print("hello");
     getList();
