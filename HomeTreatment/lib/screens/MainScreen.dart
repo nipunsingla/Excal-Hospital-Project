@@ -40,8 +40,8 @@ class _MainScreenState extends State<MainScreen> {
       PersistentBottomNavBarItem(
         icon: Icon(Icons.home),
         title: "Home",
-        activeColor: Colors.blue,
-        inactiveColor: Colors.grey,
+        activeColor: Theme.of(context).primaryColor,
+        inactiveColor: Colors.white,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
@@ -50,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
         inactiveColor: Colors.grey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.add),
+        icon: Icon(Icons.list),
         title: ("Add"),
         activeColor: Colors.blueAccent,
         inactiveColor: Colors.grey,
@@ -74,8 +74,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Navigation Bar Demo')),
-      drawer: Drawer(
+        drawer: Drawer(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -90,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
         screens: _buildScreens(),
         items: _navBarsItems(),
         confineInSafeArea: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
         stateManagement: true,
