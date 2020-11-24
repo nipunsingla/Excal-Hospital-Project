@@ -3,12 +3,12 @@ import 'package:HomeTreatment/model/patientModel.dart';
 
 import './patientHospitalModel.dart';
 class HospitalModel{
-  String _name;
-  String _city;
-  String _state;
-  String _meetLink;
-  String _url;
-  String _imageUrl;
-  List<PatientHospitalModel> _li;
-  HospitalModel(this._name,this._city,this._state,this._imageUrl,this._meetLink,this._li);
+  String name;
+  String city;
+  String state;
+  String meetLink;
+  String url;
+  String imageUrl;
+  List<PatientHospitalModel> li;
+  HospitalModel(this.name,this.city,this.state,this.imageUrl,this.meetLink,this.li);
 }
