@@ -92,6 +92,7 @@ routes.post(
       endTime,
       hospitalUrl,
     } = req.body;
+
     try {
       if (
         !name ||
@@ -104,6 +105,7 @@ routes.post(
         !endTime ||
         !hospitalUrl
       ) {
+        console.log("dmkkl")
         return BadRequest(res, "One or more field unspecified");
       }
       var st_time = startTime.split(":");

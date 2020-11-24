@@ -1,8 +1,10 @@
+import 'package:HomeTreatment/model/AppointmentList.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/model/patientHospitalModel.dart';
 import 'package:HomeTreatment/model/serverData.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
+
 import '../model/patientModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -11,6 +13,7 @@ class Auth with ChangeNotifier {
   PatientModel _p;
   String _token;
   bool _isAuth;
+  HospitalModel selectedHospital;
   Auth() {
     _p = new PatientModel("", "");
     print(_p);
@@ -23,6 +26,11 @@ class Auth with ChangeNotifier {
 
   bool isAuth() {
     return _isAuth;
+  }
+
+  void setToken(String token) {
+    print(token);
+    this._token = token;
   }
 
   Future<void> signUp(String name, String email, String contact,
@@ -58,8 +66,7 @@ class Auth with ChangeNotifier {
   Future<void> login(String email, String password) async {
     try {
       print("i am in auth");
-      var response = await http.post(
-          new Uri.http("10.0.2.2:3001", "/patient/login"),
+      var response = await http.post(new Uri.http("10.0.2.2:3001", "/login"),
           body: {"email": email, "password": password});
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
@@ -69,7 +76,7 @@ class Auth with ChangeNotifier {
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         print(jsonResponse['message']);
-        _token = jsonResponse['token'];
+        _token = jsonResponse['payload']['token'];
         await prefs.setString('token', _token);
         _isAuth = true;
       }
@@ -78,15 +85,84 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<List<HospitalModel>> getHospitalList() async {
-    List<PatientHospitalModel> lm;
-    List<HospitalModel> li = [
-      HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+  Future<List<HospitalModel>> getAllHospitalList() async {
+    try {
+      List<PatientHospitalModel> lm;
 
-      HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+      var response = await http.get(
+          new Uri.http("10.0.2.2:3001", "/hospital/getAllHospitals"),
+          headers: {'authorization': _token});
+      var jsonResponse = jsonDecode(response.body);
+      //print(jsonResponse);
+      //print(jsonResponse['message']);
 
-      HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
-    ];
-    return li;
+      if (jsonResponse['flag'] == 0) {
+        return [];
+      } else {
+        List<HospitalModel> li = [];
+        for (int i = 0; i < jsonResponse['payload'].length; i++) {
+          var item = jsonResponse['payload'][i];
+          print(item);
+          HospitalModel temp = new HospitalModel(
+              item['name'],
+              item['city'],
+              item['state'],
+              item['imageUrl'],
+              item['meetLink'],
+              item['timings'],
+              item['_id']);
+          print("i am temp");
+          print(temp);
+          li.add(temp);
+        }
+        return li;
+      }
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  Future<List<AppointmentList>> getHospitalAppointmentList(String id) async {
+    List<AppointmentList> lm;
+
+    var response = await http.get(new Uri.http("10.0.2.2:3001", "/hospital/"),
+        headers: {'authorization': _token});
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    print(jsonResponse['message']);
+
+    if (jsonResponse['flag'] == 0) {
+      return [];
+    } else {
+      for (int i = 0; i < jsonResponse['payload'].length; i++) {
+        AppointmentList li=new AppointmentList(jsonResponse['payload']['startTime'], jsonResponse['payload']['endTime'],jsonResponse['status'])
+      }
+    }
+  }
+
+  Future<void> registerHospital(
+      String name,
+      String city,
+      String state,
+      String specs,
+      String meetLink,
+      String startTime,
+      String endTime,
+      String filename,
+      String hospitalUrl) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse("http://10.0.2.2:3001/hospital/registerHospital"));
+    request.files.add(await http.MultipartFile.fromPath('image', filename));
+    request.fields['name'] = name;
+    request.fields['city'] = city;
+    request.fields['state'] = city;
+    request.fields['specs'] = specs;
+    request.fields['startTime'] = startTime;
+    request.fields['endTime'] = endTime;
+    request.fields['hospitalUrl'] = hospitalUrl;
+    request.fields['meetLink'] = meetLink;
+    request.headers['authorization'] = _token;
+    var res = await request.send();
+    print(res);
   }
 }
