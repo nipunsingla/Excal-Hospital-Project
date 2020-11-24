@@ -120,10 +120,6 @@ routes.post("/getLocation", verifyToken, (req, res) => {
 	});
 });
 
-routes.post("/allHospitals",verifyToken,(req,res)=>{
-	Hosptial.find({city,})
-})
-
 routes.get("/getLocation/hospital_detail", verifyToken, (req, res) => {
 	const id = req.query.id;
 	// console.log(id);
