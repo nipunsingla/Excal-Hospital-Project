@@ -1,5 +1,6 @@
 import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'LoginScreen.dart';
@@ -13,20 +14,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+ 
 
+
+ 
   void callPrefences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-       
-      var token=prefs.getString('token');
-      if(token!=null){
-        Navigator.of(context).pushNamed(MainScreen.routeName);
-      }
+    var token = prefs.getString('token');
+    if (token != null) {
+      Navigator.of(context).pushNamed(MainScreen.routeName);
+    }
   }
-  void initState(){
+
+  void initState() {
     super.initState();
-     callPrefences();
+    callPrefences();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,9 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(30.0)),
                           color: Colors.white,
-                          onPressed: () {
-                            
-                          },
+                          onPressed: () {},
                           child: new Container(
                             padding: const EdgeInsets.symmetric(
                               vertical: 20.0,
