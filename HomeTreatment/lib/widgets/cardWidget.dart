@@ -1,5 +1,7 @@
+import 'package:HomeTreatment/screens/AppointmentScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:link/link.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class CardWidget extends StatelessWidget {
   @override
@@ -64,10 +66,12 @@ class CardWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Link(
-                        child: Text('Visit',style:TextStyle(
-                          color:Theme.of(context).primaryColor,
-                          decoration: TextDecoration.underline
-                        ),),
+                        child: Text(
+                          'Visit',
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              decoration: TextDecoration.underline),
+                        ),
                         url: 'https://flutter.dev',
                       ),
                     ),
@@ -77,12 +81,25 @@ class CardWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Align(
                         alignment: Alignment.bottomRight,
-                        child: RaisedButton.icon(
-                            textColor: Colors.white,
-                            color: Theme.of(context).primaryColor,
-                            onPressed: () {},
-                            icon: Icon(Icons.add, size: 18),
-                            label: Text("Go")),
+                        child: InkWell(
+                          onTap: () {},
+                          child: RaisedButton.icon(
+                              textColor: Colors.white,
+                              color: Theme.of(context).primaryColor,
+                              onPressed: () {
+                                print("tap tap");
+                                pushNewScreenWithRouteSettings(
+                                  context,
+                                  screen: AppointmentScreen(),
+                                  settings: RouteSettings(
+                                      name: AppointmentScreen.routeName,
+                                      arguments: 'masmdslak'),
+                                  withNavBar: false,
+                                );
+                              },
+                              icon: Icon(Icons.add, size: 18),
+                              label: Text("Go")),
+                        ),
                       ),
                     ),
                   ),

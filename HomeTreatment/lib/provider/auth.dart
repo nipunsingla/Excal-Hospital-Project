@@ -1,3 +1,4 @@
+import 'package:HomeTreatment/model/AppointmentList.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/model/patientHospitalModel.dart';
 import 'package:HomeTreatment/model/serverData.dart';
@@ -11,6 +12,7 @@ class Auth with ChangeNotifier {
   PatientModel _p;
   String _token;
   bool _isAuth;
+  HospitalModel selectedHospital;
   Auth() {
     _p = new PatientModel("", "");
     print(_p);
@@ -59,7 +61,7 @@ class Auth with ChangeNotifier {
     try {
       print("i am in auth");
       var response = await http.post(
-          new Uri.http("10.0.2.2:3001", "/patient/login"),
+          new Uri.http("10.0.2.2:3001","/login"),
           body: {"email": email, "password": password});
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
@@ -69,7 +71,7 @@ class Auth with ChangeNotifier {
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         print(jsonResponse['message']);
-        _token = jsonResponse['token'];
+        _token = jsonResponse['payload']['token'];
         await prefs.setString('token', _token);
         _isAuth = true;
       }
@@ -78,15 +80,54 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<List<HospitalModel>> getHospitalList() async {
+  Future<List<HospitalModel>> getAllHospitalList() async {
     List<PatientHospitalModel> lm;
-    List<HospitalModel> li = [
-      HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
 
-      HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+    var response = await http.get(
+        new Uri.http("10.0.2.2:3001","/hospital/getAllHospitals"),
+        headers: {'authorization': _token});
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    print(jsonResponse['message']);
 
-      HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+    if (jsonResponse['flag'] == 0) {
+      return [];
+    } else {
+      List<HospitalModel> li = [
+        HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+        HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+        HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+      ];
+      return li;
+    }
+  }
+  Future<List<AppointmentList>> getHospitalAppointmentList() async {
+    // List<PatientHospitalModel> lm;
+
+    // var response = await http.get(
+    //     new Uri.http("10.0.2.2:3001","/hospital/getAllHospitals"),
+    //     headers: {'authorization': _token});
+    // var jsonResponse = jsonDecode(response.body);
+    // print(jsonResponse);
+    // print(jsonResponse['message']);
+
+    // if (jsonResponse['flag'] == 0) {
+    //   return [];
+    // } else {
+    //   List<HospitalModel> li = [
+    //     HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+    //     HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+    //     HospitalModel("adj", "ndslf", "dsjkdf", "ndklfnd", "fklfnlkfns", lm),
+    //   ];
+    //   return li;
+    // }
+    List<AppointmentList> li=[
+      AppointmentList("nipun",DateTime.now(),DateTime.now()),
+
+      AppointmentList("nipun",DateTime.now(),DateTime.now()),
+      AppointmentList("nipun",DateTime.now(),DateTime.now()),
     ];
     return li;
+
   }
 }

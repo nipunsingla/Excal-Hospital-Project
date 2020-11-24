@@ -95,6 +95,15 @@
 68-->/home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/android/app/src/main/AndroidManifest.xml:45:13-44
 69            android:value="2" />
 69-->/home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/android/app/src/main/AndroidManifest.xml:46:13-30
-70    </application>
-71
-72</manifest>
+70
+71        <activity
+71-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-11:74
+72            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+72-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-74
+73            android:exported="false"
+73-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-37
+74            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+74-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-71
+75    </application>
+76
+77</manifest>
