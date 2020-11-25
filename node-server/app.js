@@ -8,6 +8,7 @@ const patientRoutes = require("./routes/patient");
 const hospitalRoutes = require("./routes/hospital");
 const appointmentRoutes = require("./routes/appointment");
 const authRoutes = require("./routes/authRouter");
+const blogRoutes = require("./routes/blogRoutes");
 
 const bodyParser = require("body-parser");
 const { verifyToken, authUser } = require("./routes/verify");
@@ -38,6 +39,7 @@ app.use("/", verifyToken, authUser);
 app.use("/appointment", appointmentRoutes);
 app.use("/patient", patientRoutes);
 app.use("/hospital", hospitalRoutes);
+app.use("/blog", blogRoutes);
 
 // * 404 Page
 app.use("/", (req, res, next) => {
