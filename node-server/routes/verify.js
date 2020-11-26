@@ -27,6 +27,7 @@ const verifyToken = (req, res, next) => {
     };
     next();
   } catch (err) {
+    console.log("dnfdl");
     return SomethingWentWrong(res);
   }
 };
@@ -42,6 +43,7 @@ const authUser = async (req, res, next) => {
     }
     next();
   } catch (err) {
+    console.log("ssklnsl");
     return SomethingWentWrong(res);
   }
 };

@@ -144,32 +144,49 @@
 89            android:value="2" />
 89-->/home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/android/app/src/main/AndroidManifest.xml:59:13-30
 90
-91        <provider
-91-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:11:9-19:20
-92            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
-92-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:12:13-82
-93            android:authorities="com.example.HomeTreatment.flutter.image_provider"
-93-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:13:13-74
-94            android:exported="false"
-94-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:14:13-37
-95            android:grantUriPermissions="true" >
-95-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:15:13-47
-96            <meta-data
-96-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:16:13-18:75
-97                android:name="android.support.FILE_PROVIDER_PATHS"
-97-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:17:17-67
-98                android:resource="@xml/flutter_image_picker_file_paths" />
-98-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:18:17-72
-99        </provider>
-100
-101        <activity
-101-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-11:74
-102            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
-102-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-74
-103            android:exported="false"
-103-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-37
-104            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-104-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-71
-105    </application>
-106
-107</manifest>
+91        <activity
+91-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-11:74
+92            android:name="io.flutter.plugins.urllauncher.WebViewActivity"
+92-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-74
+93            android:exported="false"
+93-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-37
+94            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+94-->[:url_launcher] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-71
+95
+96        <provider
+96-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:11:9-19:20
+97            android:name="io.flutter.plugins.imagepicker.ImagePickerFileProvider"
+97-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:12:13-82
+98            android:authorities="com.example.HomeTreatment.flutter.image_provider"
+98-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:13:13-74
+99            android:exported="false"
+99-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:14:13-37
+100            android:grantUriPermissions="true" >
+100-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:15:13-47
+101            <meta-data
+101-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:16:13-18:75
+102                android:name="android.support.FILE_PROVIDER_PATHS"
+102-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:17:17-67
+103                android:resource="@xml/flutter_image_picker_file_paths" />
+103-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:18:17-72
+104        </provider>
+105        <provider
+105-->[:flutter_email_sender] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/flutter_email_sender/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-16:20
+106            android:name="com.sidlatau.flutteremailsender.FlutterEmailSenderFileProvider"
+106-->[:flutter_email_sender] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/flutter_email_sender/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-90
+107            android:authorities="com.example.HomeTreatment.file_provider"
+107-->[:flutter_email_sender] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/flutter_email_sender/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-65
+108            android:exported="false"
+108-->[:flutter_email_sender] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/flutter_email_sender/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-37
+109            android:grantUriPermissions="true" >
+109-->[:flutter_email_sender] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/flutter_email_sender/intermediates/library_manifest/debug/AndroidManifest.xml:12:13-47
+110            <meta-data
+110-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:16:13-18:75
+111                android:name="android.support.FILE_PROVIDER_PATHS"
+111-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:17:17-67
+112                android:resource="@xml/shared_file_paths" />
+112-->[:image_picker] /home/nipun/Desktop/Excal-Hospital-Project/HomeTreatment/build/image_picker/intermediates/library_manifest/debug/AndroidManifest.xml:18:17-72
+113        </provider>
+114    </application>
+115
+116</manifest>

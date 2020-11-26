@@ -23,8 +23,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  open_mail_app: ^0.0.3
   hexcolor: ^1.0.6
   http: ^0.12.2
+  flutter_email_sender: ^3.0.1
   convert: ^2.1.1
   provider: ^4.3.2+2
   email_validator: ^1.0.5

@@ -1,4 +1,5 @@
 import 'package:HomeTreatment/model/AppointmentList.dart';
+import 'package:HomeTreatment/model/ConsultantModel.dart';
 import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/model/blogModel.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
@@ -197,11 +198,34 @@ class Auth with ChangeNotifier {
     request.headers['authorization'] = _token;
     var res = await request.send();
     print(res);
-    if(res.statusCode==200){
+    if (res.statusCode == 200) {
       return true;
-    }
-    else{
+    } else {
       return false;
+    }
+  }
+
+  Future<List<ConsultantModel>> getAllConsultants() async {
+    print("ndkdnksjfnjfjks");
+    List<ConsultantModel> li = [];
+    var response = await http.get(
+        new Uri.http("10.0.2.2:3001", "/consultant/getAll"),
+        headers: {'authorization': _token});
+    var jsonResponse = jsonDecode(response.body);
+
+    print(jsonResponse);
+    if (jsonResponse['flag'] == 0) {
+      print("error");
+      return [];
+    } else {
+      for (int i = 0; i < jsonResponse['payload'].length; i++) {
+        var x = jsonResponse['payload'][i];
+        print(x);
+        ConsultantModel cm = new ConsultantModel(x['consultantname'],
+            x['consultantEmail'], x['consultantSpecialization']);
+        li.add(cm);
+      }
+      return li;
     }
   }
 
@@ -230,25 +254,21 @@ class Auth with ChangeNotifier {
   }
 
   Future<List<String>> getListOfIssues(List<int> arr) async {
-    var response = await http.get(
-      "https://priaid-symptom-checker-v1.p.rapidapi.com/diagnosis?symptoms=${arr.toString()}&gender=male&year_of_birth=2000&language=en-gb",
-      headers: {
-        "x-rapidapi-key": "",
-        "x-rapidapi-host": "priaid-symptom-checker-v1.p.rapidapi.com",
-        "useQueryString": "true"
-      },
-    );
+    var response = await http.post(
+        new Uri.http(
+            "10.0.2.2:3001", "/medic/getIssues"),
+
+        headers: {'authorization': _token},
+        body:{
+          "symptoms":arr.toString()
+        });
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
-    List<String> temp = [
-      "Inflammation of the peritoneum",
-      "Inflammation of a diverticulum",
-    ];
-    if (jsonResponse['message'] != "You are not subscribed to this API.")
-      for (int i = 0; i < jsonResponse.length; i++) {
-        print("working");
-        temp.add(jsonResponse[i]['Issue']['Name'].toString());
-      }
+    List<String> temp = [];
+    for (int i = 0; i < jsonResponse['payload'].length; i++) {
+      print("working");
+      temp.add(jsonResponse['payload'][i]['Issue']['Name'].toString());
+    }
 
     print(temp);
     return temp;
