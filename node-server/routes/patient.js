@@ -64,98 +64,20 @@ router.delete("/deleteAppointment", async (req, res, next) => {
     if (!appointment) {
       return BadRequest(res, "No such appointment found");
     }
+
+    if (req.user._id.toString() !== appointment.patientId.toString()) {
+      return Unauthorized(
+        res,
+        "You are not authorized to delete this appointment"
+      );
+    }
+
     const response = await Appointment.deleteOne({ _id: appointmentId });
     return Success(res, response);
   } catch (err) {
     return SomethingWentWrong(res);
   }
 });
-
-// router.post("/login", async (req, res) => {
-//   try {
-//     var user = await Patient.findOne({ email: req.body.email }).exec();
-//     console.log(user);
-
-//     if (!user) {
-//       console.log("wrong username");
-//       return res.json({ message: "The username does not exist", flag: 0 });
-//     }
-
-//     if (!bcrypt.compareSync(req.body.password, user.password)) {
-//       console.log("wrong password");
-//       return res.json({ message: "the password in invalid", flag: 0 });
-//     }
-
-//     const token = generateToken(user["email"], user["_id"]);
-//     res.json({
-//       message: "Login Successfull",
-//       flag: 1,
-//       token: token,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     return res.json({ message: "error in login", flag: 0 });
-//   }
-// });
-
-// router.post("/register", (req, res) => {
-//   console.log(req.body);
-//   const { email, password, name, contact, age, gender } = req.body;
-//   const validEmail = 0;
-//   Patient.findOne({ email: email })
-//     .then((user) => {
-//       if (user) {
-//         console.log(user);
-//         res.json({ flag: 0, message: "User Already Exists", user: user });
-//       } else {
-//         const newPatient = new Patient({
-//           email,
-//           password,
-//           name,
-//           contact,
-//           age,
-//           gender,
-//           validEmail,
-//         });
-//         console.log(newPatient);
-//         bcrypt.genSalt(10, (err, salt) => {
-//           bcrypt.hash(newPatient.password, salt, (err, hash) => {
-//             if (err) {
-//               console.log(err);
-//               res.json({
-//                 message: "Some error in bycrpt",
-//                 flag: 0,
-//               });
-//             } else {
-//               newPatient.password = hash;
-
-//               newPatient.save(async (err, newUser) => {
-//                 if (err) {
-//                   res.json({
-//                     message: "ERROR DURING REGISTRATION",
-//                     flag: 0,
-//                   });
-//                 } else {
-//                   const token = await generateToken(newUser.email, newUser._id);
-//                   res.json({
-//                     message: "sucess",
-//                     flag: 1,
-//                     token: token,
-//                   });
-//                 }
-//               });
-//             }
-//           });
-//         });
-//       }
-//     })
-//     .catch((err) => {
-//       res.json({
-//         message: "SOMETHING WENT WRONG",
-//         flag: 1,
-//       });
-//     });
-// });
 
 router.get("/checkToken", verifyToken, (req, res) => {
   return res.json({
