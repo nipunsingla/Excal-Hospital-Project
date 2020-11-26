@@ -121,7 +121,7 @@ router.delete("/delete", async (req, res, next) => {
       return BadRequest(res, "No such Blog found!");
     }
 
-    if (blod.userId.toString() !== req.user._id.toString()) {
+    if (blog.userId.toString() !== req.user._id.toString()) {
       return Unauthorized(res, "You are not authorized to delete this blog");
     }
 
