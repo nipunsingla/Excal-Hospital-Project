@@ -33,14 +33,18 @@ router.get("/getAllAppointments", async (req, res, next) => {
 router.post("/makeAppointment", async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const { hospitalId, dateAndTime } = req.body;
+    const { hospitalId, dateAndTime, patientName } = req.body;
 
     const hospital = await Hospital.findOne({ _id: hospitalId });
+    if (!hospital.bookTimeSlot(dateAndTime)) {
+      return BadRequest(res, "Invalid time slot");
+    }
     if (!hospital) {
       return BadRequest(res, "Invalid Hospital");
     }
     const appointment = new Appointment({
       hospitalId,
+      patientName,
       appointmentDateAndTime: dateAndTime,
       patientId: _id,
     });

@@ -5,10 +5,16 @@ const Schema = mongoose.Schema;
 const appointmentSchema = new Schema({
   hospitalId: {
     type: Schema.Types.ObjectId,
+    ref: "Hospital",
+    required: true,
+  },
+  patientName: {
+    type: String,
     required: true,
   },
   patientId: {
     type: Schema.Types.ObjectId,
+    ref: "Patient",
     required: true,
   },
   appointmentDateAndTime: {

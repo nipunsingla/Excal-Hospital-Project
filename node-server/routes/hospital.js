@@ -4,7 +4,7 @@ const image = require("../models/image.js");
 const multer = require("multer");
 var imgbbUploader = require("imgbb-uploader");
 
-const Hosptial = require("../models/hospital.js");
+const Hospital = require("../models/hospital.js");
 const Appointment = require("../models/appointmentModel");
 
 const {
@@ -38,7 +38,7 @@ routes.get("/getAllHospitalsByCity", async (req, res, next) => {
     if (!city) {
       return BadRequent(res, "Invalid Request!!! - City Field unspecified");
     }
-    var hospitals = await Hosptial.find({ city });
+    var hospitals = await Hospital.find({ city });
     return Success(res, hospitals);
   } catch (err) {
     return SomethingWentWrong(res);
@@ -51,7 +51,7 @@ routes.get("/getAllHospitalsByState", async (req, res, next) => {
     if (!state) {
       return BadRequent(res, "Invalid Request!!!  - State Field unspecified");
     }
-    var hospitals = await Hosptial.find({ state });
+    var hospitals = await Hospital.find({ state });
     return Success(res, hospitals);
   } catch (err) {
     return SomethingWentWrong(res);
@@ -60,7 +60,7 @@ routes.get("/getAllHospitalsByState", async (req, res, next) => {
 
 routes.get("/getAllHospitals", async (req, res, next) => {
   try {
-    var hospitals = await Hosptial.find();
+    var hospitals = await Hospital.find();
     return Success(res, hospitals);
   } catch (err) {
     return SomethingWentWrong(res);
@@ -70,7 +70,10 @@ routes.get("/getAllHospitals", async (req, res, next) => {
 routes.get("/getPatientList", async (req, res, next) => {
   try {
     const { id } = req.body;
-    const appointments = await Appointment.find({ hospitalId: id });
+    const appointments = await Appointment.find({ hospitalId: id }).populate(
+      "patientId"
+    );
+    console.log(appointments);
     return Success(res, appointments);
   } catch (err) {
     return SomethingWentWrong(res);
@@ -84,18 +87,18 @@ routes.post(
   "/registerHospital",
   upload.single("image"),
   async (req, res, next) => {
-    const {
-      name,
-      city,
-      state,
-      specs,
-      meetLink,
-      startTime,
-      endTime,
-      hospitalUrl,
-    } = req.body;
-
     try {
+      const {
+        name,
+        city,
+        state,
+        specs,
+        meetLink,
+        startTime,
+        endTime,
+        hospitalUrl,
+      } = req.body;
+
       if (
         !name ||
         !city ||
@@ -107,7 +110,6 @@ routes.post(
         !endTime ||
         !hospitalUrl
       ) {
-        console.log("dmkkl")
         return BadRequest(res, "One or more field unspecified");
       }
       var st_time = startTime.split(":");
@@ -137,7 +139,7 @@ routes.post(
         tmp2 = new Date(tmp1.getTime() + 30 * 60000);
       }
       var imgUploaderResponse = await imgbbUploader(apiKey, req.file.path);
-      var newHospital = new Hosptial({
+      var newHospital = new Hospital({
         name,
         city,
         state,
@@ -156,70 +158,5 @@ routes.post(
     }
   }
 );
-
-// routes.post("/", upload.single("image"), (req, res) => {
-//   var { name, city, state, specs } = req.body;
-//   name = name.toLowerCase();
-//   city = city.toLowerCase();
-//   state = state.toLowerCase();
-//   specs = specs.toLowerCase();
-//   // console.log(name, city, state, specs)
-//   // console.log(specs)
-//   if (!req.file) {
-//     res.render("hospital", { message: "some detail is missing", flag: "1" });
-//   }
-//   const file = req.file.path;
-//   var file_name = req.file.originalname.split(".")[1];
-//   var target_path = "upload/" + name + "." + file_name;
-//   // console.log(req.file.path)
-//   //console.log(file_name);
-//   imgbbUploader("d280e1203b0c1c3b9f00013d8580227c", req.file.path)
-//     .then((response) => {
-//       //   console.log(response)
-//       if (!name || !city || !state) {
-//         res.render("hospital", {
-//           message: "some detail is missing",
-//           flag: "1",
-//         });
-//       } else {
-//         Hosptial.findOne({ name: name, city: city, state: state }).then(
-//           (user) => {
-//             if (user) {
-//               res.render("hospital", { message: "hospital exists", flag: "1" });
-//             } else {
-//               const a = new image();
-//               //      console.log(req.file.path)
-//               //a.img.data = fs.readFileSync(req.file.path)
-//               //a.img.contentType = 'image/' + file_name;
-//               const newHosptial = new Hosptial({
-//                 name: name,
-//                 city: city,
-//                 state: state,
-//                 Url: response.url,
-//                 image: a,
-//                 specs: specs,
-//               });
-//               newHosptial.save((err, user) => {
-//                 if (err) {
-//                   res.render("hospital", { message: "some error", flag: "1" });
-//                 } else {
-//                   //   console.log(user)
-//                   //res.contentType(user.image.img.contentType)
-//                   //res.send(user.image.img.data)
-//                   res.render("hospital", {
-//                     message: "succesfully added",
-//                     flag: "2",
-//                   });
-//                 }
-//               });
-//             }
-//           }
-//         );
-//       }
-//     })
-//     .catch((err) => {
-//       res.render("hospital", { message: "some error", flag: "1" });
-//     });
-// });
 
 module.exports = routes;

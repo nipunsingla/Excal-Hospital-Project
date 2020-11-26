@@ -1,43 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-var Image = new Schema({
-  img: {
-    data: Buffer,
-    contentType: String,
-  },
-});
 
-const patient = new mongoose.Schema({
-  username: {
-    type: String,
-    required: true,
-  },
-
-  password: {
-    type: String,
-    required: true,
-  },
-
-  name: {
-    type: String,
-    required: true,
-  },
-
-  contact: {
-    type: String,
-    required: true,
-  },
-  age: {
-    type: Number,
-    required: true,
-  },
-  gender: {
-    type: String,
-    required: true,
-  },
-});
-
-var hosptial = new Schema({
+const hospital = new Schema({
   name: {
     type: String,
     required: true,
@@ -62,6 +26,10 @@ var hosptial = new Schema({
   meetLink: {
     type: String,
   },
+  delay: {
+    type: Number,
+    default: 0,
+  },
   timings: [
     {
       type: Object,
@@ -69,4 +37,15 @@ var hosptial = new Schema({
   ],
 });
 
-module.exports = mongoose.model("hosptial", hosptial);
+hospital.methods.bookTimeSlot = function (time) {
+  var found = false;
+  this.timings.map((slot) => {
+    if (slot.timeslotStart === time) {
+      slot.status = !slot.status;
+      found = true;
+    }
+  });
+  return found;
+};
+
+module.exports = mongoose.model("hospital", hospital);
