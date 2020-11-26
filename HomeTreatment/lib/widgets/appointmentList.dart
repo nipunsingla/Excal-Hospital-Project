@@ -9,7 +9,6 @@ class AppointmentListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(item[0].startTime);
     return Container(
       height: 400,
       child: item.length==0

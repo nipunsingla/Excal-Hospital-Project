@@ -95,7 +95,7 @@ class CardWidget extends StatelessWidget {
                                   screen: AppointmentScreen(),
                                   settings: RouteSettings(
                                       name: AppointmentScreen.routeName,
-                                      arguments: 'masmdslak'),
+                                      arguments:li),
                                   withNavBar: false,
                                 );
                               },
