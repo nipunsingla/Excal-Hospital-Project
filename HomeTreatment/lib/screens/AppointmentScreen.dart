@@ -1,9 +1,8 @@
 import 'package:HomeTreatment/model/AppointmentList.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
-import 'package:HomeTreatment/provider/auth.dart';
+import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/appointmentList.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 
 class AppointmentScreen extends StatefulWidget {
@@ -14,55 +13,36 @@ class AppointmentScreen extends StatefulWidget {
 
 class _AppointmentScreenState extends State<AppointmentScreen> {
   List<AppointmentList> li = [];
-  
   HospitalModel m;
   void getList() async {
     print(li);
-    List<AppointmentList> temp = await Provider.of<Auth>(context, listen: false)
-        .getHospitalAppointmentList(m.id);
+    print("i am " + m.id.toString());
     setState(() {
-      li = temp;
+      li = [];
     });
     print(li);
   }
-SearchBar searchBar;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  AppBar buildAppBar(BuildContext context) {
-    return new AppBar(
-        title: new Text('Hospital Treatment'),
-        actions: [searchBar.getSearchAction(context)]);
-  }
+  bool isInit = false;
+  SearchBar searchBar;
 
-  void onSubmitted(String value) {
-    setState(() => _scaffoldKey.currentState
-        .showSnackBar(new SnackBar(content: new Text('You wrote $value!'))));
-  }
   void initState() {
     super.initState();
-    m=ModalRoute.of(context).settings.arguments;
-    getList();
   }
-  _AppointmentScreenState(){
-    searchBar = new SearchBar(
-        inBar: false,
-        buildDefaultAppBar: buildAppBar,
-        setState: setState,
-        onSubmitted: onSubmitted,
-        onCleared: () {
-          print("cleared");
-        },
-        onClosed: () {
-          print("closed");
-        });
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!isInit) {
+      m = ModalRoute.of(context).settings.arguments;
+      getList();
+    }
+    isInit = true;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: searchBar.build(context),
-      key: _scaffoldKey,
-      
+      appBar: AppBarWidget.myAppBar(),
       backgroundColor: Theme.of(context).backgroundColor,
       body: AppointmentListWidget(li, () {}),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -74,107 +54,59 @@ SearchBar searchBar;
           showDialog(
               context: context,
               builder: (_) => Container(
-                width: 200,
-                              child: new AlertDialog(
+                    width: 200,
+                    child: new AlertDialog(
                       title: FittedBox(
                           child: new Text("Choose Your Appointment",
                               style: TextStyle(
                                   color: Theme.of(context).backgroundColor))),
                       content: ListWheelScrollView(
                         itemExtent: 100,
+                        renderChildrenOutsideViewport: false,
+                        
                         children: <Widget>[
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 1",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 2",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 3",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 4",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 5",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 6",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 7",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
-                          ),
-                          RaisedButton(
-                            onPressed: null,
-                            child: Text(
-                              "Item 8",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 25),
-                            ),
+                          ListView.builder(
+                            itemCount: m.possibleTimes.length,
+                            itemBuilder: (context, index) {
+                              print(m.possibleTimes[index]);
+                              if (m.possibleTimes[index].status == true) {
+                                return AbsorbPointer(
+                                  child: Container(
+                                    height: 50,
+                                    child: RaisedButton(
+                                      onPressed: () {},
+                                      child: Text(
+                                        "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20),
+                                      ),
+                                    ),
+                                    color: Colors.grey.shade200,
+                                  ),
+                                );
+                              } else {
+                                return RaisedButton(
+                                  onPressed: () {
+                                    
+                                  },
+                                  child: Text(
+                                    "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25),
+                                  ),
+                                );
+                              }
+                            },
                           ),
                         ],
                       ),
                       actions: <Widget>[
-                        
                         RaisedButton.icon(
                           textColor: Colors.white,
                           color: Theme.of(context).primaryColor,
@@ -204,7 +136,7 @@ SearchBar searchBar;
                         ),
                       ],
                     ),
-              ));
+                  ));
         },
       ),
     );

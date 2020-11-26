@@ -35,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final TextEditingController _nameController = new TextEditingController();
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
@@ -78,15 +78,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           return FloatingActionButton(
             onPressed: () async {
               print("hello");
-              _onLoading();
-              await Provider.of<Auth>(context, listen: false).signUp(
-                  _nameController.text,
-                  _emailController.text,
-                  _contactController.text,
-                  _passwordController.text,
-                  _genderController.text,
-                  _ageController.text);
-              _onLoading();
               if (_formKey.currentState.validate()) {
                 // If the form is valid, display a Snackbar.
                 _onLoading();
@@ -107,7 +98,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 }
               } else {
                 Scaffold.of(context)
-                    .showSnackBar(SnackBar(content: Text('Eroooorr')));
+                    .showSnackBar(SnackBar(content: Text('Error')));
               }
             },
             backgroundColor: Theme.of(context).primaryColor,

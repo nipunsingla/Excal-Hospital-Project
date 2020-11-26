@@ -13,6 +13,7 @@ class Auth with ChangeNotifier {
   String _token;
   bool _isAuth;
   HospitalModel selectedHospital;
+  String error = '';
   Auth() {
     _p = new PatientModel("", "");
     print(_p);
@@ -36,8 +37,8 @@ class Auth with ChangeNotifier {
       String password, String gender, String age) async {
     try {
       print("i am in auth");
-      var response = await http
-          .post(new Uri.http("10.0.2.2:3001", "/patient/register"), body: {
+      var response =
+          await http.post(new Uri.http("10.0.2.2:3001", "/signup"), body: {
         "email": email,
         "name": name,
         "contact": contact,
@@ -47,7 +48,7 @@ class Auth with ChangeNotifier {
       });
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
-      var itemCount = jsonResponse['flag'];
+      var itemCount = (jsonResponse['flag'] as int);
       if (itemCount == 0) {
         print(jsonResponse['message']);
       } else {
@@ -85,10 +86,9 @@ class Auth with ChangeNotifier {
   }
 
   Future<List<HospitalModel>> getAllHospitalList() async {
-       List<HospitalModel> li = [];
-     
-    try {
+    List<HospitalModel> li = [];
 
+    try {
       var response = await http.get(
           new Uri.http("10.0.2.2:3001", "/hospital/getAllHospitals"),
           headers: {'authorization': _token});
@@ -102,14 +102,24 @@ class Auth with ChangeNotifier {
         for (int i = 0; i < jsonResponse['payload'].length; i++) {
           var item = jsonResponse['payload'][i];
           print(item);
+          List<TimeModel> timeList=[];
+          for (int j = 0; j < jsonResponse['payload'][i]['timings'].length; j++) {
+            print( jsonResponse['payload'][i]['timings']);
+            timeList.add(new TimeModel(
+                jsonResponse['payload'][i]['timings'][j]['timeslotStart'],
+               ( jsonResponse['payload'][i]['timings'][j]['status'] as bool),
+                jsonResponse['payload'][i]['timings'][j]['timeslotEnd']));
+          }
+          print(timeList);
           HospitalModel temp = new HospitalModel(
-              item['name'],
-              item['city'],
-              item['state'],
-              item['imageUrl'],
-              item['meetLink'],
-              item['timings'],
-              item['_id']);
+            item['name'],
+            item['city'],
+            item['state'],
+            item['imageUrl'],
+            item['meetLink'],
+            (timeList),
+            item['_id'],
+          );
           print("i am temp");
           print(temp);
           li.add(temp);
@@ -160,7 +170,7 @@ class Auth with ChangeNotifier {
     request.files.add(await http.MultipartFile.fromPath('image', filename));
     request.fields['name'] = name;
     request.fields['city'] = city;
-    request.fields['state'] = city;
+    request.fields['state'] = state;
     request.fields['specs'] = specs;
     request.fields['startTime'] = startTime;
     request.fields['endTime'] = endTime;
@@ -199,7 +209,7 @@ class Auth with ChangeNotifier {
     var response = await http.get(
       "https://priaid-symptom-checker-v1.p.rapidapi.com/diagnosis?symptoms=${arr.toString()}&gender=male&year_of_birth=2000&language=en-gb",
       headers: {
-        "x-rapidapi-key": "50075cbc95mshb55b4179070ba43p142b82jsn8e4d3f034ccf",
+        "x-rapidapi-key": "",
         "x-rapidapi-host": "priaid-symptom-checker-v1.p.rapidapi.com",
         "useQueryString": "true"
       },
@@ -210,37 +220,37 @@ class Auth with ChangeNotifier {
       "Inflammation of the peritoneum",
       "Inflammation of a diverticulum",
     ];
-    if(jsonResponse['message']!="You are not subscribed to this API.")
-    for (int i = 0; i < jsonResponse.length; i++) {
-      print("working");
-      temp.add(jsonResponse[i]['Issue']['Name'].toString());
-    }
-    
+    if (jsonResponse['message'] != "You are not subscribed to this API.")
+      for (int i = 0; i < jsonResponse.length; i++) {
+        print("working");
+        temp.add(jsonResponse[i]['Issue']['Name'].toString());
+      }
+
     print(temp);
     return temp;
   }
- 
+
   Future<List<BlogModel>> getBlogs() async {
-
-      var response= await http.get( new Uri.http("10.0.2.2:3001", "/blog/readall"),
-      headers:{
-        'authorization':_token
-      });
-      List<BlogModel> li=[];
-      var jsonResponse=jsonDecode(response.body);
-      print(jsonResponse);
-      if(jsonResponse['flag']==0){
-        print("some error in blog fetching");
+    var response = await http.get(
+        new Uri.http("10.0.2.2:3001", "/blog/readAll"),
+        headers: {'authorization': _token});
+    List<BlogModel> li = [];
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    if (jsonResponse['flag'] == 0) {
+      print("some error in blog fetching");
+    } else {
+      for (int i = 0; i < jsonResponse['payload'].length; i++) {
+        BlogModel temp = new BlogModel(
+            jsonResponse['payload'][i]['userName'],
+            jsonResponse['payload'][i]['_id'],
+            jsonResponse['payload'][i]['description'],
+            jsonResponse['payload'][i]['title'],
+            jsonResponse['payload'][i]['imageUrl']);
+        li.add(temp);
       }
-      else{ 
-        for(int i=0;i<jsonResponse['payload'].length;i++){
-            BlogModel temp=new BlogModel(jsonResponse['payload'][i]['userName'],jsonResponse['payload'][i]['_id'],jsonResponse['payload'][i]['description'],jsonResponse['payload'][i]['title'],jsonResponse['payload'][i]['imageUrl']);
-            li.add(temp);
-        }
-      }
+    }
 
-      return li;
-
-      
+    return li;
   }
 }

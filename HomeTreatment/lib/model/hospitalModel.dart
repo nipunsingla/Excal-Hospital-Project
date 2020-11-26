@@ -1,7 +1,8 @@
 class TimeModel{
   String timeSlot;
+  String endSlot;
   bool status;
-  TimeModel(this.timeSlot,this.status);
+  TimeModel(this.timeSlot,this.status,this.endSlot);
 }
 class HospitalModel{
   String id;
@@ -11,6 +12,6 @@ class HospitalModel{
   String meetLink;
   String url;
   String imageUrl;
-  List<dynamic> possibleTimes;
+  List<TimeModel> possibleTimes;
   HospitalModel(this.name,this.city,this.state,this.imageUrl,this.meetLink,this.possibleTimes,this.id);
 }
