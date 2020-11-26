@@ -1,7 +1,3 @@
-import 'package:HomeTreatment/model/patientHospitalModel.dart';
-import 'package:HomeTreatment/model/patientModel.dart';
-
-import './patientHospitalModel.dart';
 class TimeModel{
   String timeSlot;
   bool status;

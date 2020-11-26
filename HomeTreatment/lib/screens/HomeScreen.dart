@@ -1,7 +1,6 @@
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

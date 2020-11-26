@@ -1,8 +1,5 @@
-import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
-import 'package:HomeTreatment/widgets/AppBarWidget.dart';
-import 'package:HomeTreatment/widgets/Loader.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:HomeTreatment/widgets/hospitalTile.dart';
 import 'package:flutter/material.dart';

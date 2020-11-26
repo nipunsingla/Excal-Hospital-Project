@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:HomeTreatment/provider/auth.dart';
-import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:HomeTreatment/widgets/profileIcon.dart';
@@ -22,11 +21,7 @@ class _HospitalRegisterState extends State<HospitalRegister> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
-  void _onLoading() {
-    setState(() {
-      _loading = !_loading;
-    });
-  }
+  
 
   final TextEditingController _nameController = new TextEditingController();
 
