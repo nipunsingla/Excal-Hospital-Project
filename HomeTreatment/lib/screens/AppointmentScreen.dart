@@ -1,12 +1,9 @@
 import 'package:HomeTreatment/model/AppointmentList.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
-import 'package:HomeTreatment/widgets/AppBarWidget.dart';
-import 'package:HomeTreatment/widgets/SearchBar.dart';
 import 'package:HomeTreatment/widgets/appointmentList.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../widgets/SearchBar.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 
 class AppointmentScreen extends StatefulWidget {

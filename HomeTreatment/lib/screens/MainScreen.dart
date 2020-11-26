@@ -1,4 +1,5 @@
 import 'package:HomeTreatment/model/SymptomsMode.dart';
+import 'package:HomeTreatment/screens/BlogScreen.dart';
 import 'package:HomeTreatment/screens/HospitalListScreen.dart';
 import 'package:HomeTreatment/screens/MorePage.dart';
 import 'package:HomeTreatment/screens/SymptomsChecker.dart';
@@ -30,7 +31,7 @@ class _MainScreenState extends State<MainScreen> {
     return [
       HospitalListScreen(),
       SymptomsChecker(),
-      HospitalListScreen(),
+      BlogScreen(),
       HospitalListScreen(),
       MorePage()
     ];
@@ -52,8 +53,9 @@ class _MainScreenState extends State<MainScreen> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.list),
-        title: ("Add"),
-        activeColor: Colors.blueAccent,
+        title: ("Blogs"),
+        activeColor: Theme.of(context).primaryColor
+        ,
         inactiveColor: Colors.grey,
         activeContentColor: Colors.white,
       ),
