@@ -75,9 +75,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   Scaffold.of(context)
                       .showSnackBar(SnackBar(content: Text('Eroooorr')));
                 }
-              } else {
-                Scaffold.of(context)
-                    .showSnackBar(SnackBar(content: Text('Eroooorr')));
+            } else {
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text('Eroooorr')));
               }
             },
             backgroundColor: Theme.of(context).primaryColor,

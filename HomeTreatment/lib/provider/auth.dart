@@ -102,12 +102,14 @@ class Auth with ChangeNotifier {
         for (int i = 0; i < jsonResponse['payload'].length; i++) {
           var item = jsonResponse['payload'][i];
           print(item);
-          List<TimeModel> timeList=[];
-          for (int j = 0; j < jsonResponse['payload'][i]['timings'].length; j++) {
-            print( jsonResponse['payload'][i]['timings']);
+          List<TimeModel> timeList = [];
+          for (int j = 0;
+              j < jsonResponse['payload'][i]['timings'].length;
+              j++) {
+            print(jsonResponse['payload'][i]['timings']);
             timeList.add(new TimeModel(
                 jsonResponse['payload'][i]['timings'][j]['timeslotStart'],
-               ( jsonResponse['payload'][i]['timings'][j]['status'] as bool),
+                (jsonResponse['payload'][i]['timings'][j]['status'] as bool),
                 jsonResponse['payload'][i]['timings'][j]['timeslotEnd']));
           }
           print(timeList);
@@ -130,6 +132,22 @@ class Auth with ChangeNotifier {
       print(e);
     }
     return li;
+  }
+
+  Future<bool> makeAppointment(String id, String time) async {
+    var response = await http.post(
+        new Uri.http("10.0.2.2:3001", "/patient/makeAppointment"),
+        headers: {'authorization': _token},
+        body: {"hospitalId": id, "dateAndTime": time});
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    print(jsonResponse['message']);
+
+    if (jsonResponse['flag'] == 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Future<List<AppointmentList>> getHospitalAppointmentList(String id) async {
@@ -155,7 +173,7 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> registerHospital(
+  Future<bool> registerHospital(
       String name,
       String city,
       String state,
@@ -179,6 +197,12 @@ class Auth with ChangeNotifier {
     request.headers['authorization'] = _token;
     var res = await request.send();
     print(res);
+    if(res.statusCode==200){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
   Future<List<SymptomsModel>> getListOfSymptoms() async {
