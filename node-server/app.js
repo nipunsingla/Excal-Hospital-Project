@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
 const dbURI = require("./config/key").URL;
 const symptomsData = require('./seeder/symptoms_seeder');
 const patientRoutes = require("./routes/patient");
@@ -10,10 +11,13 @@ const appointmentRoutes = require("./routes/appointment");
 const authRoutes = require("./routes/authRouter");
 const blogRoutes = require("./routes/blogRoutes");
 const consultantRoutes = require("./routes/consultantRoutes");
+const medicRoutes = require("./routes/medicRoutes");
 
 const bodyParser = require("body-parser");
 const { verifyToken, authUser } = require("./routes/verify");
 const { PageNotFound } = require("./response_helpers/responseHelpers");
+
+dotenv.config();
 
 mongoose
   .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -42,6 +46,7 @@ app.use("/patient", patientRoutes);
 app.use("/hospital", hospitalRoutes);
 app.use("/blog", blogRoutes);
 app.use("/consultant", consultantRoutes);
+app.use("/medic", medicRoutes);
 
 app.get('/getSymptomsList', (req, res) => {
   console.log("working");
@@ -62,3 +67,4 @@ const PORT = process.env.PORT || 3001; // TODO: No env file setup
 app.listen(PORT, () => {
   console.log("hello word", PORT);
 });
+
