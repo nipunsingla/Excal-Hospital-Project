@@ -40,7 +40,7 @@ const hospital = new Schema({
 hospital.methods.bookTimeSlot = function (time) {
   var found = false;
   this.timings.map((slot) => {
-    if (slot.timeslotStart === time) {
+    if (slot.timeslotStart === time && !slot.status) {
       slot.status = !slot.status;
       found = true;
     }
