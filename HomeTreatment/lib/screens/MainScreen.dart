@@ -1,5 +1,7 @@
+import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/screens/HospitalListScreen.dart';
 import 'package:HomeTreatment/screens/MorePage.dart';
+import 'package:HomeTreatment/screens/SymptomsChecker.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -15,6 +17,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   PersistentTabController _controller;
   bool _hideNavBar;
+  List<SymptomsModel> li = [];
 
   @override
   void initState() {
@@ -26,7 +29,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> _buildScreens() {
     return [
       HospitalListScreen(),
-      HospitalListScreen(),
+      SymptomsChecker(),
       HospitalListScreen(),
       HospitalListScreen(),
       MorePage()
@@ -90,12 +93,13 @@ class _MainScreenState extends State<MainScreen> {
         backgroundColor: Theme.of(context).backgroundColor,
         handleAndroidBackButtonPress: true,
         resizeToAvoidBottomInset: true,
-        stateManagement: true,
+        stateManagement: false,
         hideNavigationBarWhenKeyboardShows: true,
         hideNavigationBar: _hideNavBar,
         margin: EdgeInsets.all(10.0),
         popActionScreens: PopActionScreensType.once,
         bottomScreenMargin: 0.0,
+        
         // onWillPop: () async {
         //   await showDialog(
         //     context: context,

@@ -1,10 +1,10 @@
 import 'package:HomeTreatment/model/AppointmentList.dart';
+import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/model/patientHospitalModel.dart';
 import 'package:HomeTreatment/model/serverData.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:convert';
-
 import '../model/patientModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -135,8 +135,10 @@ class Auth with ChangeNotifier {
       return [];
     } else {
       for (int i = 0; i < jsonResponse['payload'].length; i++) {
-        AppointmentList li=new AppointmentList(jsonResponse['payload']['startTime'], jsonResponse['payload']['endTime'],jsonResponse['status'])
+        AppointmentList li=new AppointmentList(jsonResponse['payload']['startTime'], jsonResponse['payload']['endTime'],jsonResponse['status']);
+      lm.add(li);
       }
+      return lm;
     }
   }
 
@@ -165,4 +167,33 @@ class Auth with ChangeNotifier {
     var res = await request.send();
     print(res);
   }
+
+  Future<List<SymptomsModel>> getListOfSymptoms() async {
+    print("hello");
+    List<SymptomsModel> li=[];
+     var response = await http.get(new Uri.http("10.0.2.2:3001", "/getSymptomsList")
+     ,headers: {
+       'authorization':_token
+     });
+    var jsonResponse = jsonDecode(response.body);
+    print(jsonResponse);
+    print("i am in get hospital symptoms");
+    print(jsonResponse['message']);
+
+    if (jsonResponse['flag'] == 0) {
+      return li;
+    } else {
+      for (int i = 0; i < jsonResponse['payload'].length; i++) {
+        print(jsonResponse['payload'][i]['ID']);
+          SymptomsModel s1=new SymptomsModel(jsonResponse['payload'][i]['ID'],jsonResponse['payload'][i]['Name']);
+        li.add(s1);
+      }
+      return li;
+    }
+  }   
+  Future<void> getListOfIssues(List<int> arr){
+    
+  }
+
+
 }
