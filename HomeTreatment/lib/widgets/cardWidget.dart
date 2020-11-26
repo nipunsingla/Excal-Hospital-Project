@@ -23,8 +23,7 @@ class CardWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.red,
                       image: DecorationImage(
-                          image: NetworkImage(
-                        li.imageUrl),  fit: BoxFit.cover),
+                          image: NetworkImage(li.imageUrl), fit: BoxFit.cover),
                       boxShadow: [
                         BoxShadow(blurRadius: 7.0, color: Colors.black)
                       ]),
@@ -54,12 +53,14 @@ class CardWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        "${li.city}, ${li.state}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.grey.shade500),
+                      child: FittedBox(
+                        child: Text(
+                          "${li.city}, ${li.state}",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              color: Colors.grey.shade500),
+                        ),
                       ),
                     ),
                   ),
@@ -95,7 +96,7 @@ class CardWidget extends StatelessWidget {
                                   screen: AppointmentScreen(),
                                   settings: RouteSettings(
                                       name: AppointmentScreen.routeName,
-                                      arguments:li),
+                                      arguments: li),
                                   withNavBar: false,
                                 );
                               },

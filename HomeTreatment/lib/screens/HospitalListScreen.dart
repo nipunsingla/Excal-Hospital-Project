@@ -69,6 +69,7 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
       body: _li.length == 0
           ? ProgessBar()
           : Container(
+            height: 520,
               child: new ListView.builder(
                 itemCount: _li.length,
                 itemBuilder: (BuildContext ctxt, int index) {
