@@ -35,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final TextEditingController _nameController = new TextEditingController();
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,

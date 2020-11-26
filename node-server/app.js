@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const dbURI = require("./config/key").URL;
-
+const symptomsData = require('./seeder/symptoms_seeder');
 const patientRoutes = require("./routes/patient");
 const hospitalRoutes = require("./routes/hospital");
 const appointmentRoutes = require("./routes/appointment");
@@ -39,10 +39,20 @@ app.use("/appointment", appointmentRoutes);
 app.use("/patient", patientRoutes);
 app.use("/hospital", hospitalRoutes);
 
+app.get('/getSymptomsList', (req, res) => {
+  console.log("working");
+  return res.json({
+    "flag": 1,
+    "message": "success",
+    "payload": symptomsData
+  });
+});
+
 // * 404 Page
 app.use("/", (req, res, next) => {
   return PageNotFound(res);
 });
+
 
 const PORT = process.env.PORT || 3001; // TODO: No env file setup
 app.listen(PORT, () => {

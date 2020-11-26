@@ -1,3 +1,4 @@
+import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
@@ -16,13 +17,14 @@ class HospitalListScreen extends StatefulWidget {
 
 class _HospitalListScreenState extends State<HospitalListScreen> {
   List<HospitalModel> _li = [];
-
   SearchBar searchBar;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   void onSubmitted(String value) {
     setState(() => _scaffoldKey.currentState
         .showSnackBar(new SnackBar(content: new Text('You wrote $value!'))));
   }
+
+  
 
   _HospitalListScreenState() {
     searchBar = new SearchBar(
