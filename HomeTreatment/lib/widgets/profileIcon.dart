@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ProfileIcon extends StatelessWidget {
   final Function _cameraUpload;
   final Function _galleryUpload;
-  File _image;
+  final File _image;
   ProfileIcon(this._cameraUpload, this._galleryUpload, this._image);
   @override
   Widget build(BuildContext context) {

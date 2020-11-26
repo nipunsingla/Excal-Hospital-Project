@@ -4,30 +4,36 @@ import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+
 class SymptomsChecker extends StatefulWidget {
   @override
   _SymptomsCheckerState createState() => _SymptomsCheckerState();
 }
-class _SymptomsCheckerState extends State<SymptomsChecker> {
 
+class _SymptomsCheckerState extends State<SymptomsChecker> {
   List<SymptomsModel> li = [];
-  bool flag=false;
+  List<bool> flag;
+  List<String> dis = [];
   @override
   void initState() {
     super.initState();
     getSymtpomsList();
   }
 
-
   void getSymtpomsList() async {
     List<SymptomsModel> temp =
-        await Provider.of<Auth>(context,listen: false).getListOfSymptoms();
+        await Provider.of<Auth>(context, listen: false).getListOfSymptoms();
 
-   setState((){
-     flag=true;
-     li=temp;
-     print(li);
-   }); 
+    setState(() {
+      li = temp;
+      flag = new List(li.length);
+      for (int i = 0; i < flag.length; i++) {
+        flag[i] = false;
+      }
+      print(li);
+    });
     print(li);
   }
 
@@ -36,10 +42,107 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
     return Scaffold(
       appBar: AppBarWidget.myAppBar(),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: !flag
+      body: li.length == 0
           ? ProgessBar()
           : Container(
-              child:Text("hello")
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text("Symptoms"),
+                  Container(
+                    height: 100,
+                    child: ListView.builder(
+                      itemCount: li.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        print("dnks");
+                        return Padding(
+                          padding: EdgeInsets.all(10),
+                          child: InkWell(
+                            splashColor: Theme.of(context).backgroundColor,
+                            onTap: () {
+                              setState(() {
+                                flag[index] = !flag[index];
+                              });
+                            },
+                            child: Chip(
+                                elevation: 3,
+                                avatar: CircleAvatar(
+                                    backgroundColor: !flag[index]
+                                        ? Colors.grey.shade800
+                                        : Theme.of(context).primaryColor,
+                                    child: Icon(Icons
+                                        .subdirectory_arrow_right_outlined)),
+                                label: Text(li[index].name)),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  RaisedButton(
+                      color: Theme.of(context).primaryColor,
+                      elevation: 4,
+                      child: Text(
+                        "Check",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () async {
+                        List<int> temp = [];
+                        for (int i = 0; i < flag.length; i++) {
+                          if (flag[i]) {
+                            temp.add(li[i].id);
+                          }
+                        }
+                        print(temp);
+                        var x = await Provider.of<Auth>(context, listen: false)
+                            .getListOfIssues(temp);
+                        print(x);
+                        if (x != null && x.length > 0) {
+                          setState(() {
+                            dis = x;
+                          });
+                        }
+                      }),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("List of Symptoms",
+                        style: TextStyle(color: Colors.white, fontSize: 30)),
+                  ),
+                  dis.length == 0
+                      ? SizedBox()
+                      : Container(
+                          height: 300,
+                          child: ListView.builder(
+                            itemBuilder: (context, index) {
+                              print(dis[index]);
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: InkWell(
+                                    onTap: () async {
+                                      String url = 'http://www.google.com/search?q=${dis[index]}';
+                                      if (await canLaunch(url)) {
+                                        await launch(url);
+                                      } else {
+                                        throw 'Could not launch $url';
+                                      }
+                                    },
+                                    child: Text(
+                                      dis[index],
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            itemCount: dis.length,
+                          ),
+                        )
+                ],
+              ),
             ),
     );
   }

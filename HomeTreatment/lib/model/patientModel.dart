@@ -2,8 +2,6 @@ class PatientModel{
   String _name;
   
   String _email;
-  int _number;
-  int _age;
     PatientModel(this._name,this._email);
 
   String getName(){
