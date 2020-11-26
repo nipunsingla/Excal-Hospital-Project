@@ -80,6 +80,8 @@ routes.get("/getPatientList", async (req, res, next) => {
   }
 });
 
+
+
 // meetLink,
 routes.post(
   "/registerHospital",
