@@ -61,51 +61,48 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                               style: TextStyle(
                                   color: Theme.of(context).backgroundColor))),
                       content: ListWheelScrollView(
-                        itemExtent: 100,
-                        renderChildrenOutsideViewport: false,
-                        
-                        children: <Widget>[
-                          ListView.builder(
-                            itemCount: m.possibleTimes.length,
-                            itemBuilder: (context, index) {
-                              print(m.possibleTimes[index]);
-                              if (m.possibleTimes[index].status == true) {
-                                return AbsorbPointer(
-                                  child: Container(
-                                    height: 50,
-                                    child: RaisedButton(
-                                      onPressed: () {},
-                                      child: Text(
-                                        "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20),
-                                      ),
-                                    ),
-                                    color: Colors.grey.shade200,
-                                  ),
-                                );
-                              } else {
-                                return RaisedButton(
-                                  onPressed: () {
-                                    
+                          itemExtent: 100,
+                          children: <Widget>[
+                            Container(
+                                height: 200,
+                                child: ListView.builder(
+                                  itemCount: m.possibleTimes.length,
+                                  itemBuilder: (context, index) {
+                                    print(m.possibleTimes[index]);
+                                    if (m.possibleTimes[index].status == true) {
+                                      return AbsorbPointer(
+                                        child: Container(
+                                          height: 50,
+                                          child: RaisedButton(
+                                            onPressed: () {},
+                                            child: Text(
+                                              "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                            ),
+                                          ),
+                                          color: Colors.grey.shade200,
+                                        ),
+                                      );
+                                    } else {
+                                      return RaisedButton(
+                                        onPressed: () {},
+                                        child: Text(
+                                          "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 25),
+                                        ),
+                                      );
+                                    }
                                   },
-                                  child: Text(
-                                    "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
+                                )),
+                          ]),
                       actions: <Widget>[
                         RaisedButton.icon(
                           textColor: Colors.white,
