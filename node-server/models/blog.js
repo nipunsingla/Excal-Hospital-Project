@@ -4,19 +4,19 @@ const Schema = mongoose.Schema;
 const blogSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    // required: true
+    required: true
   },
   userName: {
     type: String,
-    // required: true
+    required: true
   },
   title: {
     type: String,
-    // required: true
+    required: true
   },
   description: {
     type: String,
-    // required: true
+    required: true
   },
   imageUrl: {
     type: String,
