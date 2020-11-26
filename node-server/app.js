@@ -9,6 +9,7 @@ const hospitalRoutes = require("./routes/hospital");
 const appointmentRoutes = require("./routes/appointment");
 const authRoutes = require("./routes/authRouter");
 const blogRoutes = require("./routes/blogRoutes");
+const consultantRoutes = require("./routes/consultantRoutes");
 
 const bodyParser = require("body-parser");
 const { verifyToken, authUser } = require("./routes/verify");
@@ -40,6 +41,7 @@ app.use("/appointment", appointmentRoutes);
 app.use("/patient", patientRoutes);
 app.use("/hospital", hospitalRoutes);
 app.use("/blog", blogRoutes);
+app.use("/consultant", consultantRoutes);
 
 app.get('/getSymptomsList', (req, res) => {
   console.log("working");
