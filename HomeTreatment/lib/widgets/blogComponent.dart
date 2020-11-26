@@ -24,7 +24,14 @@ class _BlogComponentState extends State<BlogComponent> {
   @override
   void initState() {
     super.initState();
+
+  }
+  bool loaded=false;
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    if(loaded==false)
     getAllBlogs();
+    loaded=true;
   }
 
   @override

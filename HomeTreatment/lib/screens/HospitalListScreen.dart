@@ -21,8 +21,6 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
         .showSnackBar(new SnackBar(content: new Text('You wrote $value!'))));
   }
 
-  
-
   _HospitalListScreenState() {
     searchBar = new SearchBar(
         inBar: false,
@@ -52,12 +50,25 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
     print(_li);
   }
 
+  @protected
+  @mustCallSuper
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   void initState() {
     print(DateTime.now());
     super.initState();
-    print("hello");
-    getList();
+  }
+  bool _isload=false;
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    if(_isload==false){
+        getList();
+  
+    }
+    _isload=true;
   }
 
   @override
@@ -69,7 +80,7 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
       body: _li.length == 0
           ? ProgessBar()
           : Container(
-            height: 520,
+              height: 520,
               child: new ListView.builder(
                 itemCount: _li.length,
                 itemBuilder: (BuildContext ctxt, int index) {

@@ -11,8 +11,9 @@ const {
     SomethingWentWrong,
 } = require("../response_helpers/responseHelpers");
 
-router.get("/getIssues", async (req, res, next) => {
+router.post("/getIssues", async (req, res, next) => {
     try {
+        console.log("in issue")
         const { symptoms } = req.body;
         const { _id } = req.user;
         const user = await Patient.findById(_id);

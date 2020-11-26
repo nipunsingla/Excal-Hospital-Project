@@ -19,7 +19,15 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
   @override
   void initState() {
     super.initState();
+  }
+  bool loaded=false;
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    if(loaded==false){
+
     getSymtpomsList();
+    }
+    loaded=true;
   }
 
   void getSymtpomsList() async {

@@ -1,5 +1,6 @@
 import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/screens/BlogScreen.dart';
+import 'package:HomeTreatment/screens/ConsultantPage.dart';
 import 'package:HomeTreatment/screens/HospitalListScreen.dart';
 import 'package:HomeTreatment/screens/MorePage.dart';
 import 'package:HomeTreatment/screens/SymptomsChecker.dart';
@@ -29,10 +30,11 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> _buildScreens() {
     return [
+
       HospitalListScreen(),
       SymptomsChecker(),
       BlogScreen(),
-      HospitalListScreen(),
+      ConsultantPage(),
       MorePage()
     ];
   }
