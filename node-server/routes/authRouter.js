@@ -60,8 +60,15 @@ router.post("/signup", async (req, res, next) => {
       gender,
     });
 
-    const response = await newPatient.savePatient();
-    return Success(res, response);
+    const user = await newPatient.savePatient();
+
+    const toAuthJSON = {
+      email,
+      id: user._id,
+      token: generateToken(email, user._id),
+    };
+
+    return Success(res, toAuthJSON);
   } catch (err) {
     console.log(err);
     return SomethingWentWrong(res);
