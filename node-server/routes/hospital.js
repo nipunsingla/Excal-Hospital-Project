@@ -1,11 +1,11 @@
 const express = require("express");
 const routes = express.Router();
-const image = require("../models/image.js");
 const multer = require("multer");
 var imgbbUploader = require("imgbb-uploader");
 
 const Hospital = require("../models/hospital.js");
 const Appointment = require("../models/appointmentModel");
+const Patient = require("../models/patient");
 
 const {
   Unauthorized,
@@ -13,7 +13,6 @@ const {
   BadRequest,
   Success,
 } = require("../response_helpers/responseHelpers");
-const { parse } = require("path");
 
 const apiKey = "d280e1203b0c1c3b9f00013d8580227c";
 
@@ -70,17 +69,12 @@ routes.get("/getAllHospitals", async (req, res, next) => {
 routes.get("/getPatientList", async (req, res, next) => {
   try {
     const { id } = req.body;
-    const appointments = await Appointment.find({ hospitalId: id }).populate(
-      "patientId"
-    );
-    console.log(appointments);
+    var appointments = await Appointment.find({ hospitalId: id });
     return Success(res, appointments);
   } catch (err) {
     return SomethingWentWrong(res);
   }
 });
-
-
 
 // meetLink,
 routes.post(
