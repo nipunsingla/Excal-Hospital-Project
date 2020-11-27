@@ -24,18 +24,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   final TextEditingController _emailController = new TextEditingController();
-
   final TextEditingController _passwordController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Scaffold(
-        appBar: AppBarWidget.myAppBar(),
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: _loading
-            ? ProgessBar()
-            : Container(
+    return Scaffold(
+      appBar: AppBarWidget.myAppBar(),
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: _loading
+          ? ProgessBar()
+          : Form(
+              key: _formKey,
+              child: Container(
                 height: MediaQuery.of(context).size.height,
                 decoration: BoxDecoration(),
                 child: SingleChildScrollView(
@@ -50,18 +50,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ),
-                      InputTextFieldWidget("Email", _emailController,
-                          Icons.email, TextInputType.emailAddress),
-                      InputTextFieldWidget("Password", _passwordController,
-                          Icons.security, TextInputType.visiblePassword),
+                      InputTextFieldWidget(
+                        "Email",
+                        _emailController,
+                        Icons.email,
+                        TextInputType.emailAddress,
+                      ),
+                      InputTextFieldWidget(
+                        "Password",
+                        _passwordController,
+                        Icons.security,
+                        TextInputType.visiblePassword,
+                      ),
                     ],
                   ),
                 ),
               ),
-        floatingActionButton: Builder(builder: (context) {
+            ),
+      floatingActionButton: Builder(
+        builder: (context) {
           return FloatingActionButton(
             onPressed: () async {
-              print("hello");
               if (_formKey.currentState.validate()) {
                 // If the form is valid, display a Snackbar.
                 _onLoading();
@@ -72,18 +81,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.of(context)
                       .pushReplacementNamed(MainScreen.routeName);
                 } else {
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Eroooorr')));
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Eroooorr',
+                      ),
+                    ),
+                  );
                 }
-            } else {
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text('Eroooorr')));
+              } else {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Erorr',
+                    ),
+                  ),
+                );
               }
             },
             backgroundColor: Theme.of(context).primaryColor,
             child: Icon(Icons.login),
           );
-        }),
+        },
       ),
     );
   }

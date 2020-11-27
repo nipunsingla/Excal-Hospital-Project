@@ -74,10 +74,10 @@ class Auth with ChangeNotifier {
           body: {"email": email, "password": password});
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
-      var itemCount = jsonResponse['flag'];
-      if (itemCount == 0) {
+      var flag = jsonResponse['flag'];
+      if (flag == 0) {
         print(jsonResponse['message']);
-        
+
         return new ErrorModel(jsonResponse['message'], false);
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -152,10 +152,9 @@ class Auth with ChangeNotifier {
     print(jsonResponse['message']);
 
     if (jsonResponse['flag'] == 0) {
-    
-        return new ErrorModel(jsonResponse['message'], false);
+      return new ErrorModel(jsonResponse['message'], false);
     } else {
-        return new ErrorModel(jsonResponse['message'], true);
+      return new ErrorModel(jsonResponse['message'], true);
     }
   }
 
@@ -210,11 +209,9 @@ class Auth with ChangeNotifier {
     var res = await request.send();
     print(res);
     if (res.statusCode == 200) {
-    
-        return new ErrorModel("SuccessFully Register", true);
+      return new ErrorModel("SuccessFully Register", true);
     } else {
-
-        return new ErrorModel("Unsucessfull", false);
+      return new ErrorModel("Unsucessfull", false);
     }
   }
 
