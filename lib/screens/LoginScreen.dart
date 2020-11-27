@@ -4,6 +4,8 @@ import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../model/ErrorModel.dart';
+
 import '../widgets/InputTextFieldWidget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -72,19 +74,29 @@ class _LoginScreenState extends State<LoginScreen> {
           return FloatingActionButton(
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                // If the form is valid, display a Snackbar.
                 _onLoading();
-                await Provider.of<Auth>(context, listen: false)
-                    .login(_emailController.text, _passwordController.text);
+                ErrorModel flag =
+                    await Provider.of<Auth>(context, listen: false).login(
+                  _emailController.text,
+                  _passwordController.text,
+                );
+                print(flag.status);
                 _onLoading();
-                if (Provider.of<Auth>(context, listen: false).isAuth()) {
-                  Navigator.of(context)
-                      .pushReplacementNamed(MainScreen.routeName);
+                if (flag.status == true) {
+                  Navigator.of(context).pushReplacementNamed(
+                    MainScreen.routeName,
+                  );
                 } else {
                   Scaffold.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Eroooorr',
+                        flag.message.toString(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.amber,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   );
@@ -93,7 +105,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 Scaffold.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      'Erorr',
+                      "Error",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.amber,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 );

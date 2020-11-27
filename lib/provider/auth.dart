@@ -38,58 +38,57 @@ class Auth with ChangeNotifier {
   Future<ErrorModel> signUp(String name, String email, String contact,
       String password, String gender, String age) async {
     try {
-      print("i am in auth");
-      var response = await http
-          .post("https://hospital-treatment.herokuapp.com/signup", body: {
-        "email": email,
-        "name": name,
-        "contact": contact,
-        "gender": gender,
-        "age": age,
-        "password": password
-      });
+      print("i am in sign up");
+      var response = await http.post(
+        "https://hospital-treatment.herokuapp.com/signup",
+        body: {
+          "email": email,
+          "name": name,
+          "contact": contact,
+          "gender": gender,
+          "age": age,
+          "password": password
+        },
+      );
       var jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
-      var itemCount = (jsonResponse['flag'] as int);
-      if (itemCount == 0) {
+      var flag = (jsonResponse['flag'] as int);
+      if (flag == 0) {
         print(jsonResponse['message']);
-        return new ErrorModel(jsonResponse['message'], false);
+        return ErrorModel(jsonResponse['message'], false);
       } else {
         print(jsonResponse['message']);
-
-        return new ErrorModel(jsonResponse['message'], true);
+        return ErrorModel(jsonResponse['message'], true);
       }
     } on Exception catch (e) {
       print(e);
-
-      return new ErrorModel("Some error try again later", false);
+      return ErrorModel("Some error try again later", false);
     }
   }
 
   Future<ErrorModel> login(String email, String password) async {
     try {
-      print("i am in auth");
+      print("i am in login");
       var response = await http.post(
-          ("https://hospital-treatment.herokuapp.com/login"),
-          body: {"email": email, "password": password});
+        "https://hospital-treatment.herokuapp.com/login",
+        body: {
+          "email": email,
+          "password": password,
+        },
+      );
       var jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
       var flag = jsonResponse['flag'];
       if (flag == 0) {
-        print(jsonResponse['message']);
-
-        return new ErrorModel(jsonResponse['message'], false);
+        return ErrorModel(jsonResponse['message'], false);
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        print(jsonResponse['message']);
         _token = jsonResponse['payload']['token'];
         await prefs.setString('token', _token);
         _isAuth = true;
-
-        return new ErrorModel(jsonResponse['message'], true);
+        return ErrorModel(jsonResponse['message'], true);
       }
     } on Exception catch (e) {
       print(e);
+      return ErrorModel("Some error try again later", false);
     }
   }
 

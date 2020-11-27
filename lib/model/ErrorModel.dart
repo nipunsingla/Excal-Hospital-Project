@@ -1,5 +1,5 @@
-class ErrorModel{
+class ErrorModel {
   String message;
   bool status;
-  ErrorModel(message,status);
+  ErrorModel(this.message, this.status);
 }
