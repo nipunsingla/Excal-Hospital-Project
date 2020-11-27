@@ -15,7 +15,11 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
   List<MyAppointmentModel> li = [];
 
   void getMyAppointmentList() async {
-    li= await Provider.of<Auth>(context).getMyAppointmentList();
+    List<MyAppointmentModel> temp =
+        await Provider.of<Auth>(context).getMyAppointmentList();
+    setState(() {
+      li = temp;
+    });
   }
 
   @override
@@ -30,8 +34,7 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
       getMyAppointmentList();
     }
     setState(() {
-      
-      _isloading=true;
+      _isloading = true;
     });
   }
 
@@ -47,9 +50,22 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
                 tileColor: Colors.white,
-                title: Text(li[index].hospitalName,style:TextStyle(color: Theme.of(context).backgroundColor)),
+                title: Text(li[index].hospitalName,
+                    style: TextStyle(color: Theme.of(context).backgroundColor)),
                 subtitle: Text(li[index].startTime),
-                trailing: li[index].status ? Chip( backgroundColor: Colors.grey.shade400,  avatar: CircleAvatar(backgroundColor: Theme.of(context).primaryColor,), label: Text("Offline")) : Chip( backgroundColor: Colors.grey.shade400,  avatar: CircleAvatar(backgroundColor: Colors.green.shade700,), label: Text("Online")),
+                trailing: li[index].status
+                    ? Chip(
+                        backgroundColor: Colors.grey.shade400,
+                        avatar: CircleAvatar(
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                        label: Text("Offline"))
+                    : Chip(
+                        backgroundColor: Colors.grey.shade400,
+                        avatar: CircleAvatar(
+                          backgroundColor: Colors.green.shade700,
+                        ),
+                        label: Text("Online")),
               ),
             );
           },

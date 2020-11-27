@@ -1,5 +1,7 @@
+import 'package:HomeTreatment/model/ErrorModel.dart';
 import 'package:HomeTreatment/model/blogModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
+import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ class BlogComponent extends StatefulWidget {
 
 class _BlogComponentState extends State<BlogComponent> {
   List<BlogModel> li = [];
+
   Future<void> getAllBlogs() async {
     print("hello");
     List<BlogModel> _getBlogs =
@@ -24,14 +27,23 @@ class _BlogComponentState extends State<BlogComponent> {
   @override
   void initState() {
     super.initState();
-
   }
-  bool loaded=false;
-  void didChangeDependencies(){
+
+  bool loaded = false;
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    if(loaded==false)
-    getAllBlogs();
-    loaded=true;
+    if (loaded == false) {
+      getAllBlogs();
+    }
+
+    loaded = true;
+  }
+
+  Future<void> deleteBlogs(String id) async {
+    print("hello");
+    ErrorModel lm =
+        await Provider.of<Auth>(context, listen: false).deleteBlogs(id);
   }
 
   @override
@@ -40,79 +52,120 @@ class _BlogComponentState extends State<BlogComponent> {
         ? ProgessBar()
         : SingleChildScrollView(
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: 500,
-                    child: ListView.builder(
-                      itemCount: li.length,
-                      itemBuilder: (context, index) {
-                        print(li[index]);
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Card(
-                              elevation: 4,
-                              child: Column(
-                                children: <Widget>[
-                                  Chip(
-                                    avatar: CircleAvatar(
-                                      child: Icon(Icons.local_hospital),
-                                      backgroundColor: Colors.grey.shade400,
-                                      foregroundColor:
-                                          Theme.of(context).primaryColor,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  height: 500,
+                  child: ListView.builder(
+                    itemCount: li.length,
+                    itemBuilder: (context, index) {
+                      print(li[index]);
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Card(
+                          elevation: 4,
+                          child: Column(
+                            children: <Widget>[
+                              Chip(
+                                avatar: CircleAvatar(
+                                  child: Icon(Icons.local_hospital),
+                                  backgroundColor: Colors.grey.shade400,
+                                  foregroundColor:
+                                      Theme.of(context).primaryColor,
+                                ),
+                                label: FittedBox(
+                                  child: Text(
+                                    li[index].userName == null
+                                        ? ""
+                                        : li[index].title,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
                                     ),
-                                    label: Text(
-                                        li[index].userName == null
-                                            ? ""
-                                            : li[index].userName,
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
-                                        )),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Image.network(li[index].imageUrl,
-                                        fit: BoxFit.contain),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.network(
+                                  li[index].imageUrl,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    li[index].description.substring(
+                                        0,
+                                        200 > li[index].description.length
+                                            ? li[index].description.length
+                                            : 200),
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).primaryColor),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(li[index].description,
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500,
-                                                color: Theme.of(context)
-                                                    .primaryColor))),
-                                  ),
-                                  Row(children: <Widget>[
-                                    Expanded(
-                                        child:  FavoriteButton(
-
-                                          iconSize: 50,
-                                          iconColor: Theme.of(context).primaryColor,
-            valueChanged: () {
-            },
-          ),
-                                      
-                                        flex: 3),
-                                    Expanded(
-                                        child: Icon(Icons.edit, size: 30,color:Colors.grey.shade600,
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                      child: FavoriteButton(
+                                        iconSize: 50,
+                                        iconColor:
+                                            Theme.of(context).primaryColor,
+                                        valueChanged: () {},
                                       ),
-                                        flex: 3),
-                                    Expanded(
-                                        child: Icon(Icons.delete, size: 30,color:Colors.grey.shade600,
+                                      flex: 3),
+                                  Expanded(
+                                      child: Icon(
+                                        Icons.edit,
+                                        size: 30,
+                                        color: Colors.grey.shade600,
                                       ),
-                                        flex: 3)
-                                  ])
+                                      flex: 3),
+                                  Expanded(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          ErrorModel lm = await Provider.of<
+                                                  Auth>(context, listen: false)
+                                              .deleteBlogs(li[index].blogID);
+                                          print(lm);
+                                          if (lm.status) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context).pushNamed(
+                                                MainScreen.routeName);
+                                          } else {
+                                            print(lm.message);
+                                            Scaffold.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  lm.message,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Icon(
+                                          Icons.delete,
+                                          size: 30,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      flex: 3),
                                 ],
-                              )),
-                        );
-                      },
-                    ),
-                  )
-                ]),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+              ],
+            ),
           );
   }
 }
