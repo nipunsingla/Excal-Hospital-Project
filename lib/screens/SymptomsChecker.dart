@@ -1,10 +1,12 @@
+import 'dart:io';
 import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
+import 'package:HomeTreatment/widgets/skinDiseases.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class SymptomsChecker extends StatefulWidget {
@@ -20,14 +22,14 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
   void initState() {
     super.initState();
   }
-  bool loaded=false;
-  void didChangeDependencies(){
-    super.didChangeDependencies();
-    if(loaded==false){
 
-    getSymtpomsList();
+  bool loaded = false;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (loaded == false) {
+      getSymtpomsList();
     }
-    loaded=true;
+    loaded = true;
   }
 
   void getSymtpomsList() async {
@@ -43,6 +45,29 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
       print(li);
     });
     print(li);
+  }
+
+  File image;
+  void _galleryUpload() async {
+    final imagefile =
+        await ImagePicker.pickImage(source: ImageSource.gallery, maxWidth: 300);
+    print(imagefile);
+    if (imagefile != null) {
+      setState(() {
+        image = File(imagefile.path);
+      });
+    }
+  }
+
+  void _cameraUpload() async {
+    final imagefile =
+        await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 300);
+    print(imagefile);
+    if (imagefile != null) {
+      setState(() {
+        image = File(imagefile.path);
+      });
+    }
   }
 
   @override
@@ -87,33 +112,50 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
                       },
                     ),
                   ),
-                  RaisedButton(
-                      color: Theme.of(context).primaryColor,
-                      elevation: 4,
-                      child: Text(
-                        "Check",
-                        style: TextStyle(color: Colors.white),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: SkinDiseasesIcon(
+                              _cameraUpload, _galleryUpload, image),
+                        ),
                       ),
-                      onPressed: () async {
-                        List<int> temp = [];
-                        for (int i = 0; i < flag.length; i++) {
-                          if (flag[i]) {
-                            temp.add(li[i].id);
-                          }
-                        }
-                        print(temp);
-                        var x = await Provider.of<Auth>(context, listen: false)
-                            .getListOfIssues(temp);
-                        print(x);
-                        if (x != null && x.length > 0) {
-                          setState(() {
-                            dis = x;
-                          });
-                        }
-                      }),
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: RaisedButton(
+                              color: Theme.of(context).primaryColor,
+                              elevation: 4,
+                              child: Text(
+                                "Check Symptoms",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () async {
+                                List<int> temp = [];
+                                for (int i = 0; i < flag.length; i++) {
+                                  if (flag[i]) {
+                                    temp.add(li[i].id);
+                                  }
+                                }
+                                print(temp);
+                                var x = await Provider.of<Auth>(context,
+                                        listen: false)
+                                    .getListOfIssues(temp);
+                                print(x);
+                                if (x != null && x.length > 0) {
+                                  setState(() {
+                                    dis = x;
+                                  });
+                                }
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("List of Symptoms",
+                    child: Text("List of Diseases",
                         style: TextStyle(color: Colors.white, fontSize: 30)),
                   ),
                   dis.length == 0
@@ -128,7 +170,8 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
                                 child: Center(
                                   child: InkWell(
                                     onTap: () async {
-                                      String url = 'http://www.google.com/search?q=${dis[index]}';
+                                      String url =
+                                          'http://www.google.com/search?q=${dis[index]}';
                                       if (await canLaunch(url)) {
                                         await launch(url);
                                       } else {

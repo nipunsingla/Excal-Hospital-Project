@@ -1,4 +1,5 @@
 import 'package:HomeTreatment/screens/HospitalRegister.dart';
+import 'package:HomeTreatment/screens/myAppointmentScreen.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/MoreWidget.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,19 @@ class MorePage extends StatelessWidget {
                 screen: HospitalRegister(),
                 settings: RouteSettings(
                   name: HospitalRegister.routeName,
+                ),
+              );
+            },
+          ),
+           MoreWidget(
+            "My Appointments",
+            () {
+              pushNewScreenWithRouteSettings(
+                context,
+                withNavBar: false,
+                screen: MyAppointmentScreen(),
+                settings: RouteSettings(
+                  name: MyAppointmentScreen.routeName,
                 ),
               );
             },
