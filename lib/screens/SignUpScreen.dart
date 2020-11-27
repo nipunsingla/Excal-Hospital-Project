@@ -1,7 +1,6 @@
 import 'package:HomeTreatment/model/ErrorModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/screens/LoginScreen.dart';
-import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:flutter/material.dart';
