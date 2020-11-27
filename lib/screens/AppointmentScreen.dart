@@ -86,175 +86,182 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       backgroundColor: Theme.of(context).backgroundColor,
       body: _isLoading
           ? ProgessBar()
-          : Container(
-              child: ListView.builder(
-                itemCount: m.possibleTimes.length,
-                itemBuilder: (context, index) {
-                  if (m.possibleTimes[index].status == true) {
-                    return SizedBox(
-                      width: 0,
-                    );
-                  } else {
-                    print("i am in else");
-                    return InkWell(
-                      onTap: () {
-                        print("on tap");
-                      },
-                      child: RaisedButton(
-                        onPressed: () {
-                          print("hello");
-                          showDialog(
-                            context: context,
-                            builder: (_) => Container(
-                              width: 200,
-                              child: new AlertDialog(
-                                title: new Text(
-                                  "Choose Type",
-                                  style: TextStyle(
-                                      color: Theme.of(context).backgroundColor),
-                                ),
-                                actions: <Widget>[
-                                  RaisedButton.icon(
-                                    textColor: Colors.white,
-                                    color: Theme.of(context).primaryColor,
-                                    onPressed: () async {
-                                      ErrorModel flag = await Provider.of<Auth>(
-                                              context,
-                                              listen: false)
-                                          .makeAppointment(m.id,
-                                              m.possibleTimes[index].timeSlot);
+          : Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Align(
+              alignment: Alignment.center,
+                          child: Container(
+                            margin:EdgeInsets.all(40),
+                  child: ListView.builder(
+                    itemCount: m.possibleTimes.length,
+                    itemBuilder: (context, index) {
+                      if (m.possibleTimes[index].status == true) {
+                        return SizedBox(
+                          width: 0,
+                        );
+                      } else {
+                        print("i am in else");
+                        return InkWell(
+                          onTap: () {
+                            print("on tap");
+                          },
+                          child: RaisedButton(
+                            onPressed: () {
+                              print("hello");
+                              showDialog(
+                                context: context,
+                                builder: (_) => Container(
+                                  width: 200,
+                                  child: new AlertDialog(
+                                    title: new Text(
+                                      "Choose Type",
+                                      style: TextStyle(
+                                          color: Theme.of(context).backgroundColor),
+                                    ),
+                                    actions: <Widget>[
+                                      RaisedButton.icon(
+                                        textColor: Colors.white,
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () async {
+                                          ErrorModel flag = await Provider.of<Auth>(
+                                                  context,
+                                                  listen: false)
+                                              .makeAppointment(m.id,
+                                                  m.possibleTimes[index].timeSlot,true);
 
-                                      if (flag.status) {
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                MainScreen.routeName);
-                                        scheduleAlarm(
-                                            DateTime.now()
-                                                .add(new Duration(seconds: 20)),
-                                            "Hurry Go");
-                                      } else {
-                                        Scaffold.of(context).showSnackBar(
-                                            SnackBar(
-                                                content: Text(flag.message)));
-                                      }
-                                    },
-                                    icon: Icon(Icons.add, size: 14),
-                                    label: Text("Offline"),
-                                  ),
-                                  RaisedButton.icon(
-                                    textColor: Colors.white,
-                                    color: Theme.of(context).primaryColor,
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => Container(
-                                          child: AlertDialog(
-                                            title: Text(
-                                              m.meetLink,
-                                              style: TextStyle(
-                                                  color: Theme.of(context)
-                                                      .backgroundColor),
+                                          if (flag.status) {
+                                            Navigator.of(context).pop();
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(
+                                                    MainScreen.routeName);
+                                            scheduleAlarm(
+                                                DateTime.now()
+                                                    .add(new Duration(seconds: 20)),
+                                                "Hurry Go");
+                                          } else {
+                                            Scaffold.of(context).showSnackBar(
+                                                SnackBar(
+                                                    content: Text(flag.message)));
+                                          }
+                                        },
+                                        icon: Icon(Icons.add, size: 14),
+                                        label: Text("Offline"),
+                                      ),
+                                      RaisedButton.icon(
+                                        textColor: Colors.white,
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => Container(
+                                              child: AlertDialog(
+                                                title: Text(
+                                                  m.meetLink,
+                                                  style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .backgroundColor),
+                                                ),
+                                                actions: [
+                                                  RaisedButton.icon(
+                                                    textColor: Colors.white,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    onPressed: () async {
+                                                      ErrorModel flag =
+                                                          await Provider.of<Auth>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .makeAppointment(
+                                                                  m.id,
+                                                                  m
+                                                                      .possibleTimes[
+                                                                          index]
+                                                                      .timeSlot,false);
+
+                                                      if (flag.status) {
+                                                        FlutterClipboard.copy(
+                                                                m.meetLink)
+                                                            .then((value) {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          Scaffold.of(context)
+                                                              .showSnackBar(SnackBar(
+                                                                  content: Text(
+                                                                      'Copied')));
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                          Navigator.of(context)
+                                                              .pushReplacementNamed(
+                                                                  MainScreen
+                                                                      .routeName);
+                                                        });
+
+                                                        scheduleAlarm(
+                                                            DateTime.now().add(
+                                                                new Duration(
+                                                                    seconds: 20)),
+                                                            m.meetLink);
+                                                      } else {
+                                                        Scaffold.of(context)
+                                                            .showSnackBar(SnackBar(
+                                                                content: Text(
+                                                                    flag.message)));
+                                                      }
+                                                    },
+                                                    icon: Icon(Icons.add, size: 18),
+                                                    label: Text("Copy"),
+                                                  ),
+                                                  RaisedButton.icon(
+                                                    textColor: Colors.white,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                    icon: Icon(Icons.add, size: 18),
+                                                    label: Text("Close"),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            actions: [
-                                              RaisedButton.icon(
-                                                textColor: Colors.white,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                onPressed: () async {
-                                                  ErrorModel flag =
-                                                      await Provider.of<Auth>(
-                                                              context,
-                                                              listen: false)
-                                                          .makeAppointment(
-                                                              m.id,
-                                                              m
-                                                                  .possibleTimes[
-                                                                      index]
-                                                                  .timeSlot);
-
-                                                  if (flag.status) {
-                                                    FlutterClipboard.copy(
-                                                            m.meetLink)
-                                                        .then((value) {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      Scaffold.of(context)
-                                                          .showSnackBar(SnackBar(
-                                                              content: Text(
-                                                                  'Copied')));
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                      Navigator.of(context)
-                                                          .pushReplacementNamed(
-                                                              MainScreen
-                                                                  .routeName);
-                                                    });
-
-                                                    scheduleAlarm(
-                                                        DateTime.now().add(
-                                                            new Duration(
-                                                                seconds: 20)),
-                                                        m.meetLink);
-                                                  } else {
-                                                    Scaffold.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                            content: Text(
-                                                                flag.message)));
-                                                  }
-                                                },
-                                                icon: Icon(Icons.add, size: 18),
-                                                label: Text("Copy"),
-                                              ),
-                                              RaisedButton.icon(
-                                                textColor: Colors.white,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                icon: Icon(Icons.add, size: 18),
-                                                label: Text("Close"),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(Icons.add, size: 14),
-                                    label: Text("Online"),
+                                          );
+                                        },
+                                        icon: Icon(Icons.add, size: 14),
+                                        label: Text("Online"),
+                                      ),
+                                      RaisedButton.icon(
+                                        textColor: Colors.white,
+                                        color: Theme.of(context).primaryColor,
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        icon: Icon(Icons.add, size: 18),
+                                        label: Text("Close"),
+                                      ),
+                                    ],
                                   ),
-                                  RaisedButton.icon(
-                                    textColor: Colors.white,
-                                    color: Theme.of(context).primaryColor,
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    icon: Icon(Icons.add, size: 18),
-                                    label: Text("Close"),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              );
+                            },
+                            color: Colors.grey.shade200,
+                            child: Text(
+                              "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 25),
                             ),
-                          );
-                        },
-                        color: Colors.grey.shade200,
-                        child: Text(
-                          "${m.possibleTimes[index].timeSlot}-${m.possibleTimes[index].endSlot}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 25),
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ),
             ),
+          ),
     );
   }
 }
