@@ -66,13 +66,19 @@ class Auth with ChangeNotifier {
 
   Future<void> login(String email, String password) async {
     try {
-      print("i am in auth");
-      var response = await http.post(new Uri.http("10.0.2.2:3001", "/login"),
-          body: {"email": email, "password": password});
+      print("i am in login");
+      var url = Uri.http("10.0.2.2:3001", "/login");
+      var response = await http.post(
+        url,
+        body: {
+          "email": email,
+          "password": password,
+        },
+      );
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
-      var itemCount = jsonResponse['flag'];
-      if (itemCount == 0) {
+      var flag = jsonResponse['flag'];
+      if (flag == 0) {
         print(jsonResponse['message']);
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -255,13 +261,9 @@ class Auth with ChangeNotifier {
 
   Future<List<String>> getListOfIssues(List<int> arr) async {
     var response = await http.post(
-        new Uri.http(
-            "10.0.2.2:3001", "/medic/getIssues"),
-
+        new Uri.http("10.0.2.2:3001", "/medic/getIssues"),
         headers: {'authorization': _token},
-        body:{
-          "symptoms":arr.toString()
-        });
+        body: {"symptoms": arr.toString()});
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
     List<String> temp = [];

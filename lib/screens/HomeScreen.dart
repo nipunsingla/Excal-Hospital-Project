@@ -1,11 +1,13 @@
-import 'package:HomeTreatment/provider/auth.dart';
-import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'LoginScreen.dart';
-import './SignUpScreen.dart';
+
+import 'package:HomeTreatment/screens/MainScreen.dart';
+import '../screens/SignUpScreen.dart';
+import '../screens/LoginScreen.dart';
+
+import 'package:HomeTreatment/provider/auth.dart';
+import '../widgets/HomeScreenWidgets/HomeScreenButton.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/';
@@ -15,15 +17,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
- 
-
-
- 
   void callPrefences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var token = prefs.getString('token');
-    Provider.of<Auth>(context,listen: false).setToken(token);
+    Provider.of<Auth>(context, listen: false).setToken(token);
     if (token != null) {
       Navigator.of(context).pushNamed(MainScreen.routeName);
     }
@@ -37,131 +35,46 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HexColor("#151515"),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            color: Theme.of(context).backgroundColor,
-          ),
-          child: Scrollbar(
-            child: new Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 250.0),
-                  child: Center(
-                    child: Icon(
-                      Icons.local_hospital_rounded,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+        ),
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding:
+                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 3),
+              child: const Center(
+                child: Icon(
+                  Icons.local_hospital_rounded,
+                  color: Colors.amber,
+                  size: 60.0,
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Medicare",
+                    style: TextStyle(
                       color: Colors.white,
-                      size: 40.0,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
                     ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Hospital Treatment",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                new Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: const EdgeInsets.only(
-                    left: 30.0,
-                    right: 30.0,
-                    top: 180.0,
-                  ),
-                  alignment: Alignment.center,
-                  child: new Row(
-                    children: <Widget>[
-                      Flexible(
-                        child: FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0)),
-                          color: Colors.white,
-                          onPressed: () {},
-                          child: new Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20.0,
-                              horizontal: 20.0,
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushNamed(SignUpScreen.routeName);
-                              },
-                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "Sign Up",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                new Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin:
-                      const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0),
-                  alignment: Alignment.center,
-                  child: new Row(
-                    children: <Widget>[
-                      new Expanded(
-                        child: new FlatButton(
-                          shape: new RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(30.0)),
-                          color: Colors.white,
-                          onPressed: () {},
-                          child: new Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 20.0,
-                              horizontal: 20.0,
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.of(context)
-                                    .pushNamed(LoginScreen.routeName);
-                              },
-                              child: new Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "LOGIN",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Colors.redAccent,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 4,
+            ),
+            HomeScreenButton("Sign Up", SignUpScreen.routeName),
+            HomeScreenButton("Login", LoginScreen.routeName),
+          ],
         ),
       ),
     );
