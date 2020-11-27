@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:HomeTreatment/model/ErrorModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
@@ -196,7 +197,7 @@ class _HospitalRegisterState extends State<HospitalRegister> {
                   print(_endTime);
                   print(DateFormat("hh:mm:ss").format(t1));
 
-                  bool temp = await Provider.of<Auth>(context, listen: false)
+                  ErrorModel temp = await Provider.of<Auth>(context, listen: false)
                       .registerHospital(
                           _nameController.text,
                           _cityController.text,
@@ -207,13 +208,13 @@ class _HospitalRegisterState extends State<HospitalRegister> {
                           endTime,
                           image.path,
                           _hospitalUrl.text);
-                  if (temp) {
+                  if (temp.status) {
                     Navigator.of(context).pop();
                     Navigator.of(context)
                         .pushReplacementNamed(MainScreen.routeName);
                   } else {
                     Scaffold.of(context)
-                        .showSnackBar(SnackBar(content: Text('Eroooorr')));
+                        .showSnackBar(SnackBar(content: Text(temp.message)));
                   }
                 } else {
                   Scaffold.of(context)
