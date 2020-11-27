@@ -34,7 +34,7 @@ class Auth with ChangeNotifier {
     this._token = token;
   }
 
-  Future<void> signUp(String name, String email, String contact,
+  Future<bool> signUp(String name, String email, String contact,
       String password, String gender, String age) async {
     try {
       print("i am in auth");
@@ -52,15 +52,14 @@ class Auth with ChangeNotifier {
       var itemCount = (jsonResponse['flag'] as int);
       if (itemCount == 0) {
         print(jsonResponse['message']);
+        return false;
       } else {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
         print(jsonResponse['message']);
-        _token = jsonResponse['token'];
-        await prefs.setString('token', _token);
-        _isAuth = true;
+        return true;
       }
     } on Exception catch (e) {
       print(e);
+      return false;
     }
   }
 
