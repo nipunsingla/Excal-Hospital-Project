@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class MainScreen extends StatefulWidget {
-  static const routeName='/main-screen';
+  static const routeName = '/main-screen';
   final BuildContext menuScreenContext;
   MainScreen({Key key, this.menuScreenContext}) : super(key: key);
 
@@ -30,7 +30,6 @@ class _MainScreenState extends State<MainScreen> {
 
   List<Widget> _buildScreens() {
     return [
-
       HospitalListScreen(),
       SymptomsChecker(),
       BlogScreen(),
@@ -49,29 +48,27 @@ class _MainScreenState extends State<MainScreen> {
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.search),
-        title: ("Search"),
-        activeColor: Colors.teal,
-        inactiveColor: Colors.grey,
+        title: ("Symptoms"),
+        activeColor: Theme.of(context).primaryColor,
+        inactiveColor: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.list),
+        icon: Icon(Icons.list,color:Colors.white),
         title: ("Blogs"),
-        activeColor: Theme.of(context).primaryColor
-        ,
-        inactiveColor: Colors.grey,
-        activeContentColor: Colors.white,
+        activeColor: Theme.of(context).primaryColor,
+        inactiveColor: Colors.white,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(Icons.message),
-        title: ("Messages"),
-        activeColor: Colors.deepOrange,
-        inactiveColor: Colors.grey,
+        title: ("Consultants"),
+        activeColor: Theme.of(context).primaryColor,
+        inactiveColor: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.settings),
-        title: ("Settings"),
-        activeColor: Colors.indigo,
-        inactiveColor: Colors.grey,
+        icon: Icon(Icons.more),
+        title: ("More"),
+        activeColor: Theme.of(context).primaryColor,
+        inactiveColor: Colors.white,  
       ),
     ];
   }
@@ -79,7 +76,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Drawer(
+      drawer: Drawer(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +100,7 @@ class _MainScreenState extends State<MainScreen> {
         margin: EdgeInsets.all(10.0),
         popActionScreens: PopActionScreensType.once,
         bottomScreenMargin: 0.0,
-        
+
         // onWillPop: () async {
         //   await showDialog(
         //     context: context,
@@ -141,4 +138,3 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 }
-

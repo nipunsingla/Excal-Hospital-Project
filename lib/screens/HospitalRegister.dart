@@ -47,6 +47,18 @@ class _HospitalRegisterState extends State<HospitalRegister> {
     }
   }
 
+   void _cameraUpload() async {
+    final imagefile =
+        await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 300);
+    print(imagefile);
+    if (imagefile != null) {
+      setState(() {
+        image = File(imagefile.path);
+      });
+    }
+  }
+
+
   void _showTimePickerStart() async {
     TimeOfDay s = await showTimePicker(
         context: context,
@@ -83,17 +95,7 @@ class _HospitalRegisterState extends State<HospitalRegister> {
     }
   }
 
-  void _cameraUpload() async {
-    final imagefile =
-        await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 300);
-    print(imagefile);
-    if (imagefile != null) {
-      setState(() {
-        image = File(imagefile.path);
-      });
-    }
-  }
-
+ 
   TimeOfDay _startTime;
   TimeOfDay _endTime;
 
