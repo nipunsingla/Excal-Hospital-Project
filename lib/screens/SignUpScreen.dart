@@ -116,7 +116,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   _ageController.text,
                 );
                 _onLoading();
-                if (Provider.of<Auth>(context, listen: false).isAuth()) {
+                if (flag.status == true) {
                   Navigator.of(context).pushReplacementNamed(
                     LoginScreen.routeName,
                   );
