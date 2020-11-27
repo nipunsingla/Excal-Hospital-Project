@@ -34,12 +34,12 @@ class Auth with ChangeNotifier {
     this._token = token;
   }
 
-  Future<void> signUp(String name, String email, String contact,
+  Future<bool> signUp(String name, String email, String contact,
       String password, String gender, String age) async {
     try {
       print("i am in auth");
       var response =
-          await http.post(new Uri.http("10.0.2.2:3001", "/signup"), body: {
+          await http.post("https://hospital-treatment.herokuapp.com/signup", body: {
         "email": email,
         "name": name,
         "contact": contact,
@@ -52,22 +52,21 @@ class Auth with ChangeNotifier {
       var itemCount = (jsonResponse['flag'] as int);
       if (itemCount == 0) {
         print(jsonResponse['message']);
+        return false;
       } else {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
         print(jsonResponse['message']);
-        _token = jsonResponse['token'];
-        await prefs.setString('token', _token);
-        _isAuth = true;
+        return true;
       }
     } on Exception catch (e) {
       print(e);
+      return false;
     }
   }
 
   Future<void> login(String email, String password) async {
     try {
       print("i am in auth");
-      var response = await http.post(new Uri.http("10.0.2.2:3001", "/login"),
+      var response = await http.post(("https://hospital-treatment.herokuapp.com/login"),
           body: {"email": email, "password": password});
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
@@ -91,7 +90,7 @@ class Auth with ChangeNotifier {
 
     try {
       var response = await http.get(
-          new Uri.http("10.0.2.2:3001", "/hospital/getAllHospitals"),
+          ("https://hospital-treatment.herokuapp.com/hospital/getAllHospitals"),
           headers: {'authorization': _token});
       var jsonResponse = jsonDecode(response.body);
       //print(jsonResponse);
@@ -137,7 +136,7 @@ class Auth with ChangeNotifier {
 
   Future<bool> makeAppointment(String id, String time) async {
     var response = await http.post(
-        new Uri.http("10.0.2.2:3001", "/patient/makeAppointment"),
+        ("https://hospital-treatment.herokuapp.com/patient/makeAppointment"),
         headers: {'authorization': _token},
         body: {"hospitalId": id, "dateAndTime": time});
     var jsonResponse = jsonDecode(response.body);
@@ -154,7 +153,7 @@ class Auth with ChangeNotifier {
   Future<List<AppointmentList>> getHospitalAppointmentList(String id) async {
     List<AppointmentList> lm;
 
-    var response = await http.get(new Uri.http("10.0.2.2:3001", "/hospital/"),
+    var response = await http.get(("https://hospital-treatment.herokuapp.com/hospital/"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
@@ -185,7 +184,7 @@ class Auth with ChangeNotifier {
       String filename,
       String hospitalUrl) async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse("http://10.0.2.2:3001/hospital/registerHospital"));
+        'POST', Uri.parse("http://https://hospital-treatment.herokuapp.com/hospital/registerHospital"));
     request.files.add(await http.MultipartFile.fromPath('image', filename));
     request.fields['name'] = name;
     request.fields['city'] = city;
@@ -209,7 +208,7 @@ class Auth with ChangeNotifier {
     print("ndkdnksjfnjfjks");
     List<ConsultantModel> li = [];
     var response = await http.get(
-        new Uri.http("10.0.2.2:3001", "/consultant/getAll"),
+        ("https://hospital-treatment.herokuapp.com/consultant/getAll"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
 
@@ -233,7 +232,7 @@ class Auth with ChangeNotifier {
     print("hello");
     List<SymptomsModel> li = [];
     var response = await http.get(
-        new Uri.http("10.0.2.2:3001", "/getSymptomsList"),
+        ("https://hospital-treatment.herokuapp.com/getSymptomsList"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
@@ -255,8 +254,8 @@ class Auth with ChangeNotifier {
 
   Future<List<String>> getListOfIssues(List<int> arr) async {
     var response = await http.post(
-        new Uri.http(
-            "10.0.2.2:3001", "/medic/getIssues"),
+        (
+            "https://hospital-treatment.herokuapp.com/medic/getIssues"),
 
         headers: {'authorization': _token},
         body:{
@@ -276,7 +275,7 @@ class Auth with ChangeNotifier {
 
   Future<List<BlogModel>> getBlogs() async {
     var response = await http.get(
-        new Uri.http("10.0.2.2:3001", "/blog/readAll"),
+        ("https://hospital-treatment.herokuapp.com/blog/readAll"),
         headers: {'authorization': _token});
     List<BlogModel> li = [];
     var jsonResponse = jsonDecode(response.body);

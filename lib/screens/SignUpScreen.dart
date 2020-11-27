@@ -1,4 +1,5 @@
 import 'package:HomeTreatment/provider/auth.dart';
+import 'package:HomeTreatment/screens/LoginScreen.dart';
 import 'package:HomeTreatment/screens/MainScreen.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/ProgessBar.dart';
@@ -81,7 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               if (_formKey.currentState.validate()) {
                 // If the form is valid, display a Snackbar.
                 _onLoading();
-                await Provider.of<Auth>(context, listen: false).signUp(
+               bool flag= await Provider.of<Auth>(context, listen: false).signUp(
                     _nameController.text,
                     _emailController.text,
                     _contactController.text,
@@ -91,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 _onLoading();
                 if (Provider.of<Auth>(context, listen: false).isAuth()) {
                   Navigator.of(context)
-                      .pushReplacementNamed(MainScreen.routeName);
+                      .pushReplacementNamed(LoginScreen.routeName);
                 } else {
                   Scaffold.of(context)
                       .showSnackBar(SnackBar(content: Text('Error')));
