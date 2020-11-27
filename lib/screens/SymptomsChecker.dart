@@ -29,7 +29,9 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
     if (loaded == false) {
       getSymtpomsList();
     }
-    loaded = true;
+    setState(() {
+      loaded = true;
+    });
   }
 
   void getSymtpomsList() async {
@@ -40,18 +42,20 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
       li = temp;
       flag = new List(li.length);
       for (int i = 0; i < flag.length; i++) {
-        flag[i] = false;
+        setState(() {
+          flag[i] = false;
+        });
       }
-      print(li);
+      //   print(li);
     });
-    print(li);
+    //   print(li);
   }
 
   File image;
   void _galleryUpload() async {
     final imagefile =
         await ImagePicker.pickImage(source: ImageSource.gallery, maxWidth: 300);
-    print(imagefile);
+    //  print(imagefile);
     if (imagefile != null) {
       setState(() {
         image = File(imagefile.path);
@@ -59,14 +63,23 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
     }
   }
 
+  Future<void> getSkinDiseasesList() async {
+    //  print("hello");
+    List<String> temp = await Provider.of<Auth>(context, listen: false)
+        .getSkinDiseases(image.path);
+    print(temp);
+  }
+
   void _cameraUpload() async {
     final imagefile =
         await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 300);
-    print(imagefile);
+    // print(imagefile);
     if (imagefile != null) {
-      setState(() {
-        image = File(imagefile.path);
-      });
+      setState(
+        () {
+          image = File(imagefile.path);
+        },
+      );
     }
   }
 
@@ -81,20 +94,23 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text("Symptoms"),
+                  Text(
+                    "Symptoms",
+                    style: TextStyle(color: Colors.white, fontSize: 30),
+                  ),
                   Container(
                     height: 100,
                     child: ListView.builder(
                       itemCount: li.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {
-                        print("dnks");
+                        //print("dnks");
                         return Padding(
                           padding: EdgeInsets.all(10),
                           child: InkWell(
                             splashColor: Theme.of(context).backgroundColor,
                             onTap: () {
-                              setState(() {
+                            setState(() {
                                 flag[index] = !flag[index];
                               });
                             },
@@ -116,10 +132,21 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
                     children: [
                       Expanded(
                         flex: 1,
-                        child: Center(
-                          child: SkinDiseasesIcon(
-                              _cameraUpload, _galleryUpload, image),
-                        ),
+                        child: Column(children: <Widget>[
+                          Center(
+                            child: SkinDiseasesIcon(
+                                _cameraUpload, _galleryUpload, image),
+                          ),
+                          RaisedButton(
+                            color: Theme.of(context).primaryColor,
+                            elevation: 4,
+                            child: Text(
+                              "Check Skin",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: getSkinDiseasesList,
+                          )
+                        ]),
                       ),
                       Expanded(
                         flex: 1,
@@ -138,11 +165,11 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
                                     temp.add(li[i].id);
                                   }
                                 }
-                                print(temp);
+                                //          print(temp);
                                 var x = await Provider.of<Auth>(context,
                                         listen: false)
                                     .getListOfIssues(temp);
-                                print(x);
+                                //        print(x);
                                 if (x != null && x.length > 0) {
                                   setState(() {
                                     dis = x;
@@ -161,7 +188,7 @@ class _SymptomsCheckerState extends State<SymptomsChecker> {
                   dis.length == 0
                       ? SizedBox()
                       : Container(
-                          height: 300,
+                          height: 200,
                           child: ListView.builder(
                             itemBuilder: (context, index) {
                               print(dis[index]);

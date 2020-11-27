@@ -2,6 +2,8 @@ import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/screens/AppointmentScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:link/link.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class CardWidget extends StatelessWidget {
@@ -69,11 +71,22 @@ class CardWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Link(
-                        child: Text(
-                          'Visit',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              decoration: TextDecoration.underline),
+                        child: InkWell(
+                          onTap: () async {
+                                      String url =
+                                          '${li.url}';
+                                      if (await canLaunch(url)) {
+                                        await launch(url);
+                                      } else {
+                                        throw 'Could not launch $url';
+                                      }
+                                    },
+                          child: Text(
+                            'Visit',
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                decoration: TextDecoration.underline),
+                          ),
                         ),
                         url: li.url,
                       ),

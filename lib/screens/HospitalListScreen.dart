@@ -50,11 +50,7 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
     print(_li);
   }
 
-  @protected
-  @mustCallSuper
-  void dispose() {
-    super.dispose();
-  }
+ 
 
   @override
   void initState() {
@@ -88,7 +84,7 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
                   return Container(
                       height: 200, child: HospitalTile(_li[index]));
                 },
-              ),
+              ),  
             ),
     );
   }
