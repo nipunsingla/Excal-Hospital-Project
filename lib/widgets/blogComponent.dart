@@ -119,13 +119,7 @@ class _BlogComponentState extends State<BlogComponent> {
                                         valueChanged: () {},
                                       ),
                                       flex: 3),
-                                  Expanded(
-                                      child: Icon(
-                                        Icons.edit,
-                                        size: 30,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                      flex: 3),
+                                  
                                   Expanded(
                                       child: InkWell(
                                         onTap: () async {
@@ -134,9 +128,7 @@ class _BlogComponentState extends State<BlogComponent> {
                                               .deleteBlogs(li[index].blogID);
                                           print(lm);
                                           if (lm.status) {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pushNamed(
-                                                MainScreen.routeName);
+                                            getAllBlogs();
                                           } else {
                                             print(lm.message);
                                             Scaffold.of(context).showSnackBar(
