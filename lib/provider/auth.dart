@@ -1,5 +1,6 @@
 import 'package:HomeTreatment/model/AppointmentList.dart';
 import 'package:HomeTreatment/model/ConsultantModel.dart';
+import 'package:HomeTreatment/model/ErrorModel.dart';
 import 'package:HomeTreatment/model/SymptomsMode.dart';
 import 'package:HomeTreatment/model/blogModel.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
@@ -34,12 +35,12 @@ class Auth with ChangeNotifier {
     this._token = token;
   }
 
-  Future<bool> signUp(String name, String email, String contact,
+  Future<ErrorModel> signUp(String name, String email, String contact,
       String password, String gender, String age) async {
     try {
       print("i am in auth");
-      var response =
-          await http.post("https://hospital-treatment.herokuapp.com/signup", body: {
+      var response = await http
+          .post("https://hospital-treatment.herokuapp.com/signup", body: {
         "email": email,
         "name": name,
         "contact": contact,
@@ -52,33 +53,40 @@ class Auth with ChangeNotifier {
       var itemCount = (jsonResponse['flag'] as int);
       if (itemCount == 0) {
         print(jsonResponse['message']);
-        return false;
+        return new ErrorModel(jsonResponse['message'], false);
       } else {
         print(jsonResponse['message']);
-        return true;
+
+        return new ErrorModel(jsonResponse['message'], true);
       }
     } on Exception catch (e) {
       print(e);
-      return false;
+
+      return new ErrorModel("Some error try again later", false);
     }
   }
 
-  Future<void> login(String email, String password) async {
+  Future<ErrorModel> login(String email, String password) async {
     try {
       print("i am in auth");
-      var response = await http.post(("https://hospital-treatment.herokuapp.com/login"),
+      var response = await http.post(
+          ("https://hospital-treatment.herokuapp.com/login"),
           body: {"email": email, "password": password});
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
       var itemCount = jsonResponse['flag'];
       if (itemCount == 0) {
         print(jsonResponse['message']);
+        
+        return new ErrorModel(jsonResponse['message'], false);
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         print(jsonResponse['message']);
         _token = jsonResponse['payload']['token'];
         await prefs.setString('token', _token);
         _isAuth = true;
+
+        return new ErrorModel(jsonResponse['message'], true);
       }
     } on Exception catch (e) {
       print(e);
@@ -134,7 +142,7 @@ class Auth with ChangeNotifier {
     return li;
   }
 
-  Future<bool> makeAppointment(String id, String time) async {
+  Future<ErrorModel> makeAppointment(String id, String time) async {
     var response = await http.post(
         ("https://hospital-treatment.herokuapp.com/patient/makeAppointment"),
         headers: {'authorization': _token},
@@ -144,16 +152,18 @@ class Auth with ChangeNotifier {
     print(jsonResponse['message']);
 
     if (jsonResponse['flag'] == 0) {
-      return false;
+    
+        return new ErrorModel(jsonResponse['message'], false);
     } else {
-      return true;
+        return new ErrorModel(jsonResponse['message'], true);
     }
   }
 
   Future<List<AppointmentList>> getHospitalAppointmentList(String id) async {
     List<AppointmentList> lm;
 
-    var response = await http.get(("https://hospital-treatment.herokuapp.com/hospital/"),
+    var response = await http.get(
+        ("https://hospital-treatment.herokuapp.com/hospital/"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
@@ -173,7 +183,7 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<bool> registerHospital(
+  Future<ErrorModel> registerHospital(
       String name,
       String city,
       String state,
@@ -184,7 +194,9 @@ class Auth with ChangeNotifier {
       String filename,
       String hospitalUrl) async {
     var request = http.MultipartRequest(
-        'POST', Uri.parse("http://https://hospital-treatment.herokuapp.com/hospital/registerHospital"));
+        'POST',
+        Uri.parse(
+            "http://https://hospital-treatment.herokuapp.com/hospital/registerHospital"));
     request.files.add(await http.MultipartFile.fromPath('image', filename));
     request.fields['name'] = name;
     request.fields['city'] = city;
@@ -198,9 +210,11 @@ class Auth with ChangeNotifier {
     var res = await request.send();
     print(res);
     if (res.statusCode == 200) {
-      return true;
+    
+        return new ErrorModel("SuccessFully Register", true);
     } else {
-      return false;
+
+        return new ErrorModel("Unsucessfull", false);
     }
   }
 
@@ -254,13 +268,9 @@ class Auth with ChangeNotifier {
 
   Future<List<String>> getListOfIssues(List<int> arr) async {
     var response = await http.post(
-        (
-            "https://hospital-treatment.herokuapp.com/medic/getIssues"),
-
+        ("https://hospital-treatment.herokuapp.com/medic/getIssues"),
         headers: {'authorization': _token},
-        body:{
-          "symptoms":arr.toString()
-        });
+        body: {"symptoms": arr.toString()});
     var jsonResponse = jsonDecode(response.body);
     print(jsonResponse);
     List<String> temp = [];

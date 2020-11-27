@@ -1,4 +1,5 @@
 import 'package:HomeTreatment/model/AppointmentList.dart';
+import 'package:HomeTreatment/model/ErrorModel.dart';
 import 'package:HomeTreatment/model/hospitalModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/screens/MainScreen.dart';
@@ -117,13 +118,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                     textColor: Colors.white,
                                     color: Theme.of(context).primaryColor,
                                     onPressed: () async {
-                                      bool flag = await Provider.of<Auth>(
+                                      ErrorModel flag = await Provider.of<Auth>(
                                               context,
                                               listen: false)
                                           .makeAppointment(m.id,
                                               m.possibleTimes[index].timeSlot);
 
-                                      if (flag) {
+                                      if (flag.status) {
                                         Navigator.of(context).pop();
                                         Navigator.of(context)
                                             .pushReplacementNamed(
@@ -135,8 +136,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                       } else {
                                         Scaffold.of(context).showSnackBar(
                                             SnackBar(
-                                                content:
-                                                    Text('Error Try Again')));
+                                                content: Text(flag.message)));
                                       }
                                     },
                                     icon: Icon(Icons.add, size: 14),
@@ -162,15 +162,18 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                                 color: Theme.of(context)
                                                     .primaryColor,
                                                 onPressed: () async {
-                                                  bool flag = await Provider.of<
-                                                              Auth>(context,
-                                                          listen: false)
-                                                      .makeAppointment(
-                                                          m.id,
-                                                          m.possibleTimes[index]
-                                                              .timeSlot);
+                                                  ErrorModel flag =
+                                                      await Provider.of<Auth>(
+                                                              context,
+                                                              listen: false)
+                                                          .makeAppointment(
+                                                              m.id,
+                                                              m
+                                                                  .possibleTimes[
+                                                                      index]
+                                                                  .timeSlot);
 
-                                                  if (flag) {
+                                                  if (flag.status) {
                                                     FlutterClipboard.copy(
                                                             m.meetLink)
                                                         .then((value) {
@@ -193,10 +196,13 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                                                     scheduleAlarm(
                                                         DateTime.now().add(
                                                             new Duration(
-                                                                seconds: 20)),m.meetLink
-                                                        );
+                                                                seconds: 20)),
+                                                        m.meetLink);
                                                   } else {
-                                                    print("error in booking");
+                                                    Scaffold.of(context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(
+                                                                flag.message)));
                                                   }
                                                 },
                                                 icon: Icon(Icons.add, size: 18),
