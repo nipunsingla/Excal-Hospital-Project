@@ -42,7 +42,7 @@ class _HospitalTileState extends State<HospitalTile>
                   Padding(
                     padding: const EdgeInsets.all(14.0),
                     child: Text(
-                      "Something here",
+                      "Specilization in Cardio And Brain",
                       style: TextStyle(
                         color: Colors.grey.shade800,
                       ),

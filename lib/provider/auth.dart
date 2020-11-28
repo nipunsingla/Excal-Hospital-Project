@@ -17,9 +17,10 @@ class Auth with ChangeNotifier {
   bool _isAuth;
   HospitalModel selectedHospital;
   String error = '';
+  String _mlToken = 'Token 35ff180760f42a815ddb97b01c1bdfaf6829f64c';
   Auth() {
     _p = new PatientModel("", "");
-    print(_p);
+    //  print(_p);
     _token = '';
     _isAuth = false;
   }
@@ -32,14 +33,14 @@ class Auth with ChangeNotifier {
   }
 
   void setToken(String token) {
-    print(token);
+    // print(token);
     this._token = token;
   }
 
   Future<ErrorModel> signUp(String name, String email, String contact,
       String password, String gender, String age) async {
     try {
-      print("i am in sign up");
+      //  print("i am in sign up");
       var response = await http.post(
         "https://hospital-treatment.herokuapp.com/signup",
         body: {
@@ -54,21 +55,21 @@ class Auth with ChangeNotifier {
       var jsonResponse = jsonDecode(response.body);
       var flag = (jsonResponse['flag'] as int);
       if (flag == 0) {
-        print(jsonResponse['message']);
+        //    print(jsonResponse['message']);
         return ErrorModel(jsonResponse['message'], false);
       } else {
-        print(jsonResponse['message']);
+        //  print(jsonResponse['message']);
         return ErrorModel(jsonResponse['message'], true);
       }
     } on Exception catch (e) {
-      print(e);
+      //print(e);
       return ErrorModel("Some error try again later", false);
     }
   }
 
   Future<ErrorModel> login(String email, String password) async {
     try {
-      print("i am in login");
+      //   print("i am in login");
       var response = await http.post(
         "https://hospital-treatment.herokuapp.com/login",
         body: {
@@ -88,7 +89,7 @@ class Auth with ChangeNotifier {
         return ErrorModel(jsonResponse['message'], true);
       }
     } on Exception catch (e) {
-      print(e);
+      //  print(e);
       return ErrorModel("Some error try again later", false);
     }
   }
@@ -109,18 +110,18 @@ class Auth with ChangeNotifier {
       } else {
         for (int i = 0; i < jsonResponse['payload'].length; i++) {
           var item = jsonResponse['payload'][i];
-          print(item);
+          //      print(item);
           List<TimeModel> timeList = [];
           for (int j = 0;
               j < jsonResponse['payload'][i]['timings'].length;
               j++) {
-            print(jsonResponse['payload'][i]['timings']);
+            //    print(jsonResponse['payload'][i]['timings']);
             timeList.add(new TimeModel(
                 jsonResponse['payload'][i]['timings'][j]['timeslotStart'],
                 (jsonResponse['payload'][i]['timings'][j]['status'] as bool),
                 jsonResponse['payload'][i]['timings'][j]['timeslotEnd']));
           }
-          print(timeList);
+          //   print(timeList);
           HospitalModel temp = new HospitalModel(
             item['name'],
             item['city'],
@@ -130,14 +131,15 @@ class Auth with ChangeNotifier {
             (timeList),
             item['_id'],
           );
-          print("i am temp");
-          print(temp);
+
+          ///  print("i am temp");
+          //print(temp);
           li.add(temp);
         }
         return li;
       }
     } on Exception catch (e) {
-      print(e);
+      // print(e);
     }
     return li;
   }
@@ -155,8 +157,9 @@ class Auth with ChangeNotifier {
           "status": (status ? "true" : "false")
         });
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
-    print(jsonResponse['message']);
+
+    ///  print(jsonResponse);
+    // print(jsonResponse['message']);
 
     if (jsonResponse['flag'] == 0) {
       return new ErrorModel(jsonResponse['message'], false);
@@ -172,8 +175,8 @@ class Auth with ChangeNotifier {
         ("https://hospital-treatment.herokuapp.com/hospital/"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
-    print(jsonResponse['message']);
+    //  print(jsonResponse);
+    // print(jsonResponse['message']);
 
     if (jsonResponse['flag'] == 0) {
       return [];
@@ -189,23 +192,59 @@ class Auth with ChangeNotifier {
     }
   }
 
+  Future<ErrorModel> deleteBlogs(String id) async {
+    var response = await http.post(
+        "https://hospital-treatment.herokuapp.com/blog/delete",
+        body: {'blogId': id},
+        headers: {'authorization': _token});
+    var jsonResponse = jsonDecode(response.body);
+    if (jsonResponse['flag'] == 1) {
+      return new ErrorModel("SuccessFully Deleted", true);
+    } else {
+      return new ErrorModel(jsonResponse['message'], false);
+    }
+  }
+
   Future<ErrorModel> addBlogs(
       String title, String description, String filename) async {
     var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(
-            "http://https://hospital-treatment.herokuapp.com/hospital/registerHospital"));
+
+      'POST',
+      Uri.parse("https://hospital-treatment.herokuapp.com/blog/create"),
+    );
     request.files.add(await http.MultipartFile.fromPath('image', filename));
     request.fields['blogTitle'] = title;
     request.fields['blogDesc'] = description;
     request.headers['authorization'] = _token;
     var res = await request.send();
-    print(res);
+    // print(res);
     if (res.statusCode == 200) {
       return new ErrorModel("SuccessFully Register", true);
     } else {
       return new ErrorModel("Unsucessfull", false);
     }
+  }
+
+  Future<List<String>> getSkinDiseases(String filename) async {
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse("http://54.197.95.62:8000/api/image-report/"),
+    );
+    request.files
+        .add(await http.MultipartFile.fromPath('parsed_image', filename));
+    request.headers['Authorization'] =
+        'Token 35ff180760f42a815ddb97b01c1bdfaf6829f64c';
+    var res = await request.send();
+    print(res.statusCode);
+    final respStr = await res.stream.bytesToString();
+
+    print(respStr);
+    List<String> li = [];
+    if (res.statusCode == 200) {
+      Map<String,dynamic> mp=jsonDecode(respStr);
+      print(mp);
+    } else {}
+    return li;
   }
 
   Future<ErrorModel> registerHospital(
@@ -233,7 +272,7 @@ class Auth with ChangeNotifier {
     request.fields['meetLink'] = meetLink;
     request.headers['authorization'] = _token;
     var res = await request.send();
-    print(res);
+    //  print(res);
     if (res.statusCode == 200) {
       return new ErrorModel("SuccessFully Register", true);
     } else {
@@ -242,21 +281,22 @@ class Auth with ChangeNotifier {
   }
 
   Future<List<ConsultantModel>> getAllConsultants() async {
-    print("ndkdnksjfnjfjks");
+    // print("ndkdnksjfnjfjks");
     List<ConsultantModel> li = [];
     var response = await http.get(
         ("https://hospital-treatment.herokuapp.com/consultant/getAll"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
 
-    print(jsonResponse);
+    // print(jsonResponse);
     if (jsonResponse['flag'] == 0) {
-      print("error");
+      ///  print("error");
       return [];
     } else {
       for (int i = 0; i < jsonResponse['payload'].length; i++) {
         var x = jsonResponse['payload'][i];
-        print(x);
+
+        ///  print(x);
         ConsultantModel cm = new ConsultantModel(x['consultantname'],
             x['consultantEmail'], x['consultantSpecialization']);
         li.add(cm);
@@ -266,21 +306,21 @@ class Auth with ChangeNotifier {
   }
 
   Future<List<SymptomsModel>> getListOfSymptoms() async {
-    print("hello");
+    // print("hello");
     List<SymptomsModel> li = [];
     var response = await http.get(
         ("https://hospital-treatment.herokuapp.com/getSymptomsList"),
         headers: {'authorization': _token});
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
-    print("i am in get hospital symptoms");
-    print(jsonResponse['message']);
+    //print(jsonResponse);
+    //print("i am in get hospital symptoms");
+    //print(jsonResponse['message']);
 
     if (jsonResponse['flag'] == 0) {
       return li;
     } else {
       for (int i = 0; i < jsonResponse['payload'].length; i++) {
-        print(jsonResponse['payload'][i]['ID']);
+        // print(jsonResponse['payload'][i]['ID']);
         SymptomsModel s1 = new SymptomsModel(jsonResponse['payload'][i]['ID'],
             jsonResponse['payload'][i]['Name']);
         li.add(s1);
@@ -295,14 +335,14 @@ class Auth with ChangeNotifier {
         headers: {'authorization': _token},
         body: {"symptoms": arr.toString()});
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
+    //print(jsonResponse);
     List<String> temp = [];
     for (int i = 0; i < jsonResponse['payload'].length; i++) {
-      print("working");
+      // print("working");
       temp.add(jsonResponse['payload'][i]['Issue']['Name'].toString());
     }
 
-    print(temp);
+    // print(temp);
     return temp;
   }
 
@@ -312,9 +352,9 @@ class Auth with ChangeNotifier {
         headers: {'authorization': _token});
     List<BlogModel> li = [];
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
+    //  print(jsonResponse);
     if (jsonResponse['flag'] == 0) {
-      print("some error in blog fetching");
+      //    print("some error in blog fetching");
     } else {
       for (int i = 0; i < jsonResponse['payload'].length; i++) {
         BlogModel temp = new BlogModel(
@@ -336,18 +376,19 @@ class Auth with ChangeNotifier {
         headers: {'authorization': _token});
     List<MyAppointmentModel> li = [];
     var jsonResponse = jsonDecode(response.body);
-    print(jsonResponse);
+    // print(jsonResponse);
     if (jsonResponse['flag'] == 0) {
-      print("some error in Appointment fetching");
+      // print("some error in Appointment fetching");
     } else {
       for (int i = 0; i < jsonResponse['payload'].length; i++) {
         var x = jsonResponse['payload'][i];
         MyAppointmentModel temp = new MyAppointmentModel(
             x['hospitalId'], x['appointmentDateAndTime'], x['status']);
         li.add(temp);
+
       }
     }
-
+  print(li);
     return li;
   }
 }
