@@ -23,22 +23,26 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
 
   _HospitalListScreenState() {
     searchBar = new SearchBar(
-        inBar: false,
-        buildDefaultAppBar: buildAppBar,
-        setState: setState,
-        onSubmitted: onSubmitted,
-        onCleared: () {
-          print("cleared");
-        },
-        onClosed: () {
-          print("closed");
-        });
+      inBar: false,
+      buildDefaultAppBar: buildAppBar,
+      setState: setState,
+      onSubmitted: onSubmitted,
+      onCleared: () {
+        print("cleared");
+      },
+      onClosed: () {
+        print("closed");
+      },
+    );
   }
 
   AppBar buildAppBar(BuildContext context) {
     return new AppBar(
-        title: new Text('Search Hospitals '),
-        actions: [searchBar.getSearchAction(context)]);
+      title: new Text('Search Hospitals'),
+      actions: [
+        searchBar.getSearchAction(context),
+      ],
+    );
   }
 
   Future<void> getList() async {
@@ -47,7 +51,6 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
     setState(() {
       _li = _getList;
     });
-    print(_li);
   }
 
   @protected
@@ -58,17 +61,16 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
 
   @override
   void initState() {
-    print(DateTime.now());
     super.initState();
   }
-  bool _isload=false;
-  void didChangeDependencies(){
+
+  bool _isload = false;
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    if(_isload==false){
-        getList();
-  
+    if (_isload == false) {
+      getList();
     }
-    _isload=true;
+    _isload = true;
   }
 
   @override
@@ -80,13 +82,14 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
       body: _li.length == 0
           ? ProgessBar()
           : Container(
-              height: 520,
+              height: 650,
               child: new ListView.builder(
                 itemCount: _li.length,
                 itemBuilder: (BuildContext ctxt, int index) {
-                  print(_li[index].imageUrl);
                   return Container(
-                      height: 200, child: HospitalTile(_li[index]));
+                    height: MediaQuery.of(context).size.height / 4,
+                    child: HospitalTile(_li[index]),
+                  );
                 },
               ),
             ),

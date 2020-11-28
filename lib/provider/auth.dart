@@ -191,7 +191,7 @@ class Auth with ChangeNotifier {
 
   Future<ErrorModel> addBlogs(
       String title, String description, String filename) async {
-     var request = http.MultipartRequest(
+    var request = http.MultipartRequest(
         'POST',
         Uri.parse(
             "http://https://hospital-treatment.herokuapp.com/hospital/registerHospital"));
@@ -221,7 +221,7 @@ class Auth with ChangeNotifier {
     var request = http.MultipartRequest(
         'POST',
         Uri.parse(
-            "http://https://hospital-treatment.herokuapp.com/hospital/registerHospital"));
+            "https://hospital-treatment.herokuapp.com/hospital/registerHospital"));
     request.files.add(await http.MultipartFile.fromPath('image', filename));
     request.fields['name'] = name;
     request.fields['city'] = city;

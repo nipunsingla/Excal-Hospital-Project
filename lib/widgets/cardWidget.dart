@@ -21,12 +21,13 @@ class CardWidget extends StatelessWidget {
                 child: Container(
                   width: 100.0,
                   decoration: BoxDecoration(
-                      color: Colors.red,
-                      image: DecorationImage(
-                          image: NetworkImage(li.imageUrl), fit: BoxFit.cover),
-                      boxShadow: [
-                        BoxShadow(blurRadius: 7.0, color: Colors.black)
-                      ]),
+                    // color: Colors.red,
+                    image: DecorationImage(
+                        image: NetworkImage(li.imageUrl), fit: BoxFit.cover),
+                    boxShadow: [
+                      BoxShadow(blurRadius: 7.0, color: Colors.black)
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -45,8 +46,9 @@ class CardWidget extends StatelessWidget {
                     label: Text(
                       li.name,
                       style: TextStyle(
-                          fontSize: 20,
-                          color: Theme.of(context).backgroundColor),
+                        fontSize: 20,
+                        color: Theme.of(context).backgroundColor,
+                      ),
                     ),
                   ),
                   Padding(
@@ -57,9 +59,10 @@ class CardWidget extends StatelessWidget {
                         child: Text(
                           "${li.city}, ${li.state}",
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.grey.shade500),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.grey.shade500,
+                          ),
                         ),
                       ),
                     ),
@@ -72,8 +75,9 @@ class CardWidget extends StatelessWidget {
                         child: Text(
                           'Visit',
                           style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              decoration: TextDecoration.underline),
+                            color: Theme.of(context).primaryColor,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                         url: li.url,
                       ),
@@ -87,21 +91,21 @@ class CardWidget extends StatelessWidget {
                         child: InkWell(
                           onTap: () {},
                           child: RaisedButton.icon(
-                              textColor: Colors.white,
-                              color: Theme.of(context).primaryColor,
-                              onPressed: () {
-                                print("tap tap");
-                                pushNewScreenWithRouteSettings(
-                                  context,
-                                  screen: AppointmentScreen(),
-                                  settings: RouteSettings(
-                                      name: AppointmentScreen.routeName,
-                                      arguments: li),
-                                  withNavBar: false,
-                                );
-                              },
-                              icon: Icon(Icons.add, size: 18),
-                              label: Text("Go")),
+                            textColor: Colors.white,
+                            color: Theme.of(context).primaryColor,
+                            onPressed: () {
+                              pushNewScreenWithRouteSettings(
+                                context,
+                                screen: AppointmentScreen(),
+                                settings: RouteSettings(
+                                    name: AppointmentScreen.routeName,
+                                    arguments: li),
+                                withNavBar: false,
+                              );
+                            },
+                            icon: Icon(Icons.add, size: 18),
+                            label: Text("Go"),
+                          ),
                         ),
                       ),
                     ),

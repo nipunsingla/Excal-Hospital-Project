@@ -18,10 +18,13 @@ class _HospitalTileState extends State<HospitalTile>
   Widget build(BuildContext context) {
     return Center(
       child: GestureDetector(
-        onTap: () => setState(() => _isFlipped = !_isFlipped),
+        onTap: () => setState(
+          () => _isFlipped = !_isFlipped,
+        ),
         onDoubleTap: () => {print("double tap")},
         child: FlippableBox(
-          front: Container(width: double.infinity, child: CardWidget(widget.li)),
+          front:
+              Container(width: double.infinity, child: CardWidget(widget.li)),
           back: Container(
             width: double.infinity,
             child: Card(
@@ -39,13 +42,12 @@ class _HospitalTileState extends State<HospitalTile>
                   Padding(
                     padding: const EdgeInsets.all(14.0),
                     child: Text(
-                      "Specificationakdnlksfklsndklfnsdlndslfnsdflsnfl  kfhdsodnckldsnjklfio fm,fhfksfnls vmf9whflebu",
+                      "Something here",
                       style: TextStyle(
                         color: Colors.grey.shade800,
                       ),
                     ),
                   ),
-                  
                 ],
               ),
             ),

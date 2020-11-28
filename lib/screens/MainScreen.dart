@@ -28,6 +28,12 @@ class _MainScreenState extends State<MainScreen> {
     _hideNavBar = false;
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
   List<Widget> _buildScreens() {
     return [
       HospitalListScreen(),
@@ -53,7 +59,7 @@ class _MainScreenState extends State<MainScreen> {
         inactiveColor: Colors.white,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.list,color:Colors.white),
+        icon: Icon(Icons.list, color: Colors.white),
         title: ("Blogs"),
         activeColor: Theme.of(context).primaryColor,
         inactiveColor: Colors.white,
@@ -68,9 +74,16 @@ class _MainScreenState extends State<MainScreen> {
         icon: Icon(Icons.more),
         title: ("More"),
         activeColor: Theme.of(context).primaryColor,
-        inactiveColor: Colors.white,  
+        inactiveColor: Colors.white,
       ),
     ];
+  }
+
+  var _selectedPage = 0;
+  void _navigate(int index) {
+    setState(() {
+      _selectedPage = index;
+    });
   }
 
   @override
@@ -86,7 +99,47 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
-      body: PersistentTabView(
+      body: _buildScreens()[_selectedPage],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _navigate,
+        backgroundColor: Theme.of(context).backgroundColor,
+        type: BottomNavigationBarType.shifting,
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.red,
+        currentIndex: _selectedPage,
+        items: [
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.search),
+            label: "Symptoms",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.list),
+            label: "Blogs",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.message),
+            label: "Consultants",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.more),
+            label: "More",
+          ),
+        ],
+      ),
+    );
+  }
+}
+/*
+body: PersistentTabView(
         controller: _controller,
         screens: _buildScreens(),
         items: _navBarsItems(),
@@ -120,8 +173,9 @@ class _MainScreenState extends State<MainScreen> {
         //   return false;
         // },
         decoration: NavBarDecoration(
-            colorBehindNavBar: Colors.indigo,
-            borderRadius: BorderRadius.circular(20.0)),
+          colorBehindNavBar: Colors.indigo,
+          borderRadius: BorderRadius.circular(20.0),
+        ),
         popAllScreensOnTapOfSelectedTab: true,
         itemAnimationProperties: ItemAnimationProperties(
           duration: Duration(milliseconds: 400),
@@ -135,6 +189,42 @@ class _MainScreenState extends State<MainScreen> {
         navBarStyle:
             NavBarStyle.style15, // Choose the nav bar style with this property
       ),
-    );
-  }
-}
+*/
+/*
+body: _buildScreens()[_selectedPage],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _navigate,
+        backgroundColor: Theme.of(context).backgroundColor,
+        type: BottomNavigationBarType.shifting,
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.red,
+        currentIndex: _selectedPage,
+        items: [
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.search),
+            label: "Symptoms",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.list),
+            label: "Blogs",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.message),
+            label: "Consultants",
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Theme.of(context).backgroundColor,
+            icon: Icon(Icons.more),
+            label: "More",
+          ),
+        ],
+      ),
+*/
