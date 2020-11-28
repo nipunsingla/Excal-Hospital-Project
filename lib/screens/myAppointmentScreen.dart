@@ -1,6 +1,7 @@
 import 'package:HomeTreatment/model/MyAppointmentModel.dart';
 import 'package:HomeTreatment/provider/auth.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
+import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,8 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
     setState(() {
       li = temp;
     });
+    print("HERERERER");
+    print(temp);
   }
 
   @override
@@ -27,14 +30,19 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
     super.initState();
   }
 
-  bool _isloading = false;
+  bool _isInit = false;
+  bool _isLoading = false;
   void didChangeDependencies() {
+    setState(() {
+      _isLoading = true;
+    });
     super.didChangeDependencies();
-    if (_isloading == false) {
+    if (_isInit == false) {
       getMyAppointmentList();
     }
     setState(() {
-      _isloading = true;
+      _isInit = true;
+      _isLoading = false;
     });
   }
 
@@ -43,35 +51,48 @@ class _MyAppointmentScreenState extends State<MyAppointmentScreen> {
     return Scaffold(
       appBar: AppBarWidget.myAppBar(),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: Container(
-        child: ListView.builder(
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                tileColor: Colors.white,
-                title: Text(li[index].hospitalName,
-                    style: TextStyle(color: Theme.of(context).backgroundColor)),
-                subtitle: Text(li[index].startTime),
-                trailing: li[index].status
-                    ? Chip(
-                        backgroundColor: Colors.grey.shade400,
-                        avatar: CircleAvatar(
-                          backgroundColor: Theme.of(context).primaryColor,
+      body: _isLoading
+          ? ProgessBar()
+          : li.length == 0
+              ? Center(
+                  child: Text(
+                    'You dont have any appointments yet',
+                    style: TextStyle(
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+                )
+              : Container(
+                  child: ListView.builder(
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          tileColor: Colors.white,
+                          title: Text(li[index].hospitalName,
+                              style: TextStyle(
+                                  color: Theme.of(context).backgroundColor)),
+                          subtitle: Text(li[index].startTime),
+                          trailing: li[index].status
+                              ? Chip(
+                                  backgroundColor: Colors.grey.shade400,
+                                  avatar: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).primaryColor,
+                                  ),
+                                  label: Text("Offline"))
+                              : Chip(
+                                  backgroundColor: Colors.grey.shade400,
+                                  avatar: CircleAvatar(
+                                    backgroundColor: Colors.green.shade700,
+                                  ),
+                                  label: Text("Online")),
                         ),
-                        label: Text("Offline"))
-                    : Chip(
-                        backgroundColor: Colors.grey.shade400,
-                        avatar: CircleAvatar(
-                          backgroundColor: Colors.green.shade700,
-                        ),
-                        label: Text("Online")),
-              ),
-            );
-          },
-          itemCount: li.length,
-        ),
-      ),
+                      );
+                    },
+                    itemCount: li.length,
+                  ),
+                ),
     );
   }
 }

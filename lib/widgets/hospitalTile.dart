@@ -21,7 +21,7 @@ class _HospitalTileState extends State<HospitalTile>
         onTap: () => setState(
           () => _isFlipped = !_isFlipped,
         ),
-        onDoubleTap: () => {print("double tap")},
+        // onDoubleTap: () => {print("double tap")},
         child: FlippableBox(
           front:
               Container(width: double.infinity, child: CardWidget(widget.li)),
