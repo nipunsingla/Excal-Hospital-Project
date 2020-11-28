@@ -61,9 +61,9 @@ class MyApp extends StatelessWidget {
           canvasColor: Colors.white,
           textTheme: TextTheme(
               headline6:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
               headline4:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  TextStyle(color: Colors.amber, fontWeight: FontWeight.bold),
               subtitle1:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold))),
       initialRoute: '/',

@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:HomeTreatment/screens/HomeScreen.dart';
 import 'package:HomeTreatment/screens/HospitalRegister.dart';
 import 'package:HomeTreatment/screens/myAppointmentScreen.dart';
 import 'package:HomeTreatment/widgets/AppBarWidget.dart';
 import 'package:HomeTreatment/widgets/MoreWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MorePage extends StatelessWidget {
   @override
@@ -28,7 +33,7 @@ class MorePage extends StatelessWidget {
               );
             },
           ),
-           MoreWidget(
+          MoreWidget(
             "My Appointments",
             () {
               pushNewScreenWithRouteSettings(
@@ -39,6 +44,14 @@ class MorePage extends StatelessWidget {
                   name: MyAppointmentScreen.routeName,
                 ),
               );
+            },
+          ),
+          MoreWidget(
+            "Logout",
+            () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setString('token',null);
+            SystemNavigator.pop();
             },
           ),
         ],

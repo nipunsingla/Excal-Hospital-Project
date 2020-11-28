@@ -17,16 +17,40 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
   SearchBar searchBar;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   void onSubmitted(String value) {
-    setState(() => _scaffoldKey.currentState
-        .showSnackBar(new SnackBar(content: new Text('You wrote $value!'))));
+    if(value==''){
+      setState(() {
+          
+      });
+    }
+    else{
+      print(value);
+    List<HospitalModel> _lm=[];
+      for(int i=0;i<_li.length;i++){
+        if(_li[i].name.contains(t.text) || _li[i].city.contains(t.text) || _li[i].state.contains(t.text)){
+          _lm.add(_li[i]);
+        }
+      }
+      if(_lm.length==0){
+      setState(() {
+        
+      });
+      }
+      else
+      setState((){
+        print(_lm);
+        _li=_lm;
+      });
+    }
   }
-
+  TextEditingController t=new TextEditingController();
   _HospitalListScreenState() {
     searchBar = new SearchBar(
-        inBar: false,
+
         buildDefaultAppBar: buildAppBar,
         setState: setState,
+        controller: t,
         onSubmitted: onSubmitted,
+        hintText: t.text,
         onCleared: () {
           print("cleared");
         },

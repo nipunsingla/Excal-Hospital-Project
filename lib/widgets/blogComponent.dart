@@ -15,12 +15,18 @@ class BlogComponent extends StatefulWidget {
 class _BlogComponentState extends State<BlogComponent> {
   List<BlogModel> li = [];
 
+  List<bool> temp = new List(10);
+
   Future<void> getAllBlogs() async {
     print("hello");
     List<BlogModel> _getBlogs =
         await Provider.of<Auth>(context, listen: false).getBlogs();
     setState(() {
       li = _getBlogs;
+      temp = new List(li.length);
+      for (int i = 0; i < temp.length; i++) {
+        temp[i] = false;
+      }
     });
   }
 
@@ -36,8 +42,9 @@ class _BlogComponentState extends State<BlogComponent> {
     if (loaded == false) {
       getAllBlogs();
     }
-
-    loaded = true;
+    setState(() {
+      loaded = true;
+    });
   }
 
   Future<void> deleteBlogs(String id) async {
@@ -55,7 +62,7 @@ class _BlogComponentState extends State<BlogComponent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                  height: 500,
+                  height: 600,
                   child: ListView.builder(
                     itemCount: li.length,
                     itemBuilder: (context, index) {
@@ -96,16 +103,40 @@ class _BlogComponentState extends State<BlogComponent> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    li[index].description.substring(
-                                        0,
-                                        200 > li[index].description.length
-                                            ? li[index].description.length
-                                            : 200),
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        color: Theme.of(context).primaryColor),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        temp[index]
+                                            ? li[index].description
+                                            : (200>li[index].description.length?li[index]
+                                                .description:li[index].description
+                                                .substring(0, 200)),
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w500,
+                                            color:
+                                                Theme.of(context).primaryColor),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            temp[index] = !temp[index];
+                                          });
+                                        },
+                                        child: Text(
+                                          temp[index]
+                                              ? "Read Less"
+                                              : "Read More ...",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                              color: Theme.of(context)
+                                                  .primaryColor),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
@@ -120,13 +151,6 @@ class _BlogComponentState extends State<BlogComponent> {
                                       ),
                                       flex: 3),
                                   Expanded(
-                                      child: Icon(
-                                        Icons.edit,
-                                        size: 30,
-                                        color: Colors.grey.shade600,
-                                      ),
-                                      flex: 3),
-                                  Expanded(
                                       child: InkWell(
                                         onTap: () async {
                                           ErrorModel lm = await Provider.of<
@@ -134,9 +158,7 @@ class _BlogComponentState extends State<BlogComponent> {
                                               .deleteBlogs(li[index].blogID);
                                           print(lm);
                                           if (lm.status) {
-                                            Navigator.of(context).pop();
-                                            Navigator.of(context).pushNamed(
-                                                MainScreen.routeName);
+                                            getAllBlogs();
                                           } else {
                                             print(lm.message);
                                             Scaffold.of(context).showSnackBar(
