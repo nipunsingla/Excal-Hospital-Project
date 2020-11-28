@@ -19,7 +19,7 @@ class _HospitalListScreenState extends State<HospitalListScreen> {
   void onSubmitted(String value) {
     if(value==''){
       setState(() {
-        
+          
       });
     }
     else{

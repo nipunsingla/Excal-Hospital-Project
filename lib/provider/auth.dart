@@ -234,12 +234,14 @@ class Auth with ChangeNotifier {
     request.headers['Authorization'] =
         'Token 35ff180760f42a815ddb97b01c1bdfaf6829f64c';
     var res = await request.send();
+    print(res.statusCode);
     final respStr = await res.stream.bytesToString();
 
     print(respStr);
     List<String> li = [];
     if (res.statusCode == 200) {
-      print(res.stream.toString());
+      Map<String,dynamic> mp=jsonDecode(respStr);
+      print(mp);
     } else {}
     return li;
   }
@@ -382,6 +384,7 @@ class Auth with ChangeNotifier {
         MyAppointmentModel temp = new MyAppointmentModel(
             x['hospitalId'], x['appointmentDateAndTime'], x['status']);
         li.add(temp);
+
       }
     }
   print(li);
