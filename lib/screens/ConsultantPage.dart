@@ -6,8 +6,6 @@ import 'package:HomeTreatment/widgets/ProgessBar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_email_sender/flutter_email_sender.dart';
-
 class ConsultantPage extends StatefulWidget {
   @override
   _ConsultantPageState createState() => _ConsultantPageState();
@@ -23,35 +21,38 @@ class _ConsultantPageState extends State<ConsultantPage> {
     setState(() {
       li = temp;
     });
-    print(li);
   }
 
   void initState() {
     super.initState();
   }
-  bool loaded=false;
-  void didChangeDependencies(){
+
+  bool loaded = false;
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    if(loaded==false){
+    if (loaded == false) {
       print("hello world");
-    getConsultantList();
-    
+      getConsultantList();
     }
-    loaded=true;
+    loaded = true;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget.myAppBar(),
       backgroundColor: Theme.of(context).backgroundColor,
-      body: li.length==0?ProgessBar():Container(
-        child: ListView.builder(itemBuilder:(context,index){
-          return ConsultantCard(li[index].name, li[index].email, li[index].specilization);
-        },
-        itemCount: li.length,
-
-        )
-      ),
+      body: li.length == 0
+          ? ProgessBar()
+          : Container(
+              child: ListView.builder(
+                itemBuilder: (context, index) {
+                  return ConsultantCard(
+                      li[index].name, li[index].email, li[index].specilization);
+                },
+                itemCount: li.length,
+              ),
+            ),
     );
   }
 }

@@ -36,6 +36,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final TextEditingController _nameController = new TextEditingController();
 
+  Future<void> submitData(context) async {
+    if (_formKey.currentState.validate()) {
+      _onLoading();
+      ErrorModel flag = await Provider.of<Auth>(context, listen: false).signUp(
+        _nameController.text,
+        _emailController.text,
+        _contactController.text,
+        _passwordController.text,
+        _genderController.text,
+        _ageController.text,
+      );
+      _onLoading();
+      if (flag.status == true) {
+        await showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            backgroundColor: Colors.grey.shade300,
+            title: Text(
+              "Verify Email",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            content: Text(
+              "We have sent you an email with a link for verification",
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          ),
+        );
+        Navigator.of(context).pushReplacementNamed(
+          LoginScreen.routeName,
+        );
+      } else {
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              flag.message.toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.amber,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+            ),
+          ),
+        );
+      }
+    } else {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Some error occured",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.amber,
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,53 +177,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       floatingActionButton: Builder(
         builder: (context) {
           return FloatingActionButton(
-            onPressed: () async {
-              if (_formKey.currentState.validate()) {
-                _onLoading();
-                ErrorModel flag =
-                    await Provider.of<Auth>(context, listen: false).signUp(
-                  _nameController.text,
-                  _emailController.text,
-                  _contactController.text,
-                  _passwordController.text,
-                  _genderController.text,
-                  _ageController.text,
-                );
-                _onLoading();
-                if (flag.status == true) {
-                  Navigator.of(context).pushReplacementNamed(
-                    LoginScreen.routeName,
-                  );
-                } else {
-                  Scaffold.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        flag.message.toString(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.amber,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              } else {
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      "Some error occured",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.amber,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                );
-              }
+            onPressed: () {
+              submitData(context);
             },
             backgroundColor: Theme.of(context).primaryColor,
             child: Icon(Icons.login),

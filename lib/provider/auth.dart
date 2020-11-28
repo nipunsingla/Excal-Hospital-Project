@@ -208,6 +208,7 @@ class Auth with ChangeNotifier {
   Future<ErrorModel> addBlogs(
       String title, String description, String filename) async {
     var request = http.MultipartRequest(
+
       'POST',
       Uri.parse("https://hospital-treatment.herokuapp.com/blog/create"),
     );
